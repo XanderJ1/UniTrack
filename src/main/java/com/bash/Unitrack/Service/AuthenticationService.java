@@ -1,7 +1,9 @@
 package com.bash.Unitrack.Service;
 
 import com.bash.Unitrack.Controllers.AuthenticationController;
+import com.bash.Unitrack.Data.Models.Lecturer;
 import com.bash.Unitrack.Data.Models.Role;
+import com.bash.Unitrack.Data.Models.Student;
 import com.bash.Unitrack.Data.Models.User;
 import com.bash.Unitrack.Repositories.UserRepository;
 import org.springframework.beans.BeanUtils;
@@ -47,15 +49,28 @@ public class AuthenticationService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User already exists");
         }
         else {
-            User newUser = new User();
-            BeanUtils.copyProperties(user, newUser);
-            newUser.setPassword(passwordEncoder.encode(user.getPassword()));
-            if (user.getRole().equals(Role.ADMIN)) {
-                newUser.setRole(Role.ADMIN);
-            } else if (user.getRole().equals(Role.LECTURER)) {
+
+                User newUser = new User();
+            if (user.getRole().equals(Role.LECTURER)){
+                newUser = new Lecturer();
+                BeanUtils.copyProperties(user, newUser);
+                newUser.setPassword(passwordEncoder.encode(user.getPassword()));
                 newUser.setRole(Role.LECTURER);
-            } else
+            }
+
+            if (user.getRole().equals(Role.STUDENT)){
+                newUser = new Student();
+                BeanUtils.copyProperties(user, newUser);
+                newUser.setPassword(passwordEncoder.encode(user.getPassword()));
                 newUser.setRole(Role.STUDENT);
+            }
+
+            if (user.getRole().equals(Role.ADMIN)){
+                newUser = new User();
+                BeanUtils.copyProperties(user, newUser);
+                newUser.setPassword(passwordEncoder.encode(user.getPassword()));
+                newUser.setRole(Role.ADMIN);
+            }
 
             userRepository.save(newUser);
 
