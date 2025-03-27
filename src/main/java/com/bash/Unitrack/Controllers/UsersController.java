@@ -19,11 +19,6 @@ public class UsersController {
     }
 
     @GetMapping("")
-    public List<String> fetchUsers(){
-        return List.of("Akwasi", "Jason");
-    }
-
-    @GetMapping("users")
     public List<User> fetchUser(){
         return userservice.fetchUsers();
     }
