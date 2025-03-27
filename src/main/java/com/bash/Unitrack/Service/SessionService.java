@@ -2,7 +2,6 @@ package com.bash.Unitrack.Service;
 
 import com.bash.Unitrack.Data.DTO.SessionDTO;
 import com.bash.Unitrack.Data.Models.*;
-import com.bash.Unitrack.Miscellaneous;
 import com.bash.Unitrack.Repositories.AttendanceRepository;
 import com.bash.Unitrack.Repositories.CourseRepository;
 import com.bash.Unitrack.Repositories.SessionRepository;
@@ -26,19 +25,16 @@ public class SessionService {
     private final UserRepository userRepository;
     private final AttendanceRepository attendanceRepository;
     private final CourseRepository courseRepository;
-    private final Miscellaneous miscellaneous;
 
     public SessionService(
             SessionRepository sessionRepository,
             UserRepository userRepository,
             AttendanceRepository attendanceRepository,
-            CourseRepository courseRepository,
-            Miscellaneous miscellaneous){
+            CourseRepository courseRepository){
         this.sessionRepository = sessionRepository;
         this.userRepository = userRepository;
         this.attendanceRepository = attendanceRepository;
         this.courseRepository = courseRepository;
-        this.miscellaneous = miscellaneous;
     }
 
 
