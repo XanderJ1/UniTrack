@@ -10,9 +10,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
-@AllArgsConstructor
 @Data
 @Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "app_user", discriminatorType = DiscriminatorType.STRING)
 @Table(name = "app_user")
 public class User implements UserDetails {
 
