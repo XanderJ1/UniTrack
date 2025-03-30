@@ -16,7 +16,7 @@ Swagger/OpenAPI for documentation
 
 Getting Started
 Clone the Repository
-git clone repo
+git clone https://github.com/XanderJ1/UniTrack.git
 
 # Configuration
 
