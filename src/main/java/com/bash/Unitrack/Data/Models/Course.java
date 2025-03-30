@@ -3,6 +3,7 @@ package com.bash.Unitrack.Data.Models;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -20,8 +21,8 @@ public class Course {
     private Session session;
     @OneToMany
     private List<Student> student;
-    @OneToOne
-    private Lecturer lecturer;
+    @ManyToMany
+    private List<Lecturer> lecturer = new ArrayList<>();
 
     public Course(){
 
@@ -30,7 +31,7 @@ public class Course {
     public Course(String courseName, String courseId, Lecturer lecturer){
         this.courseName = courseName;
         this.courseId = courseId;
-        this.lecturer = lecturer;
+        this.lecturer.add(lecturer);
     }
 
     public String getCourseName() {
@@ -57,11 +58,11 @@ public class Course {
         this.student = student;
     }
 
-    public Lecturer getLecturer() {
+    public List<Lecturer> getLecturer() {
         return lecturer;
     }
 
     public void setLecturer(Lecturer lecturer) {
-        this.lecturer = lecturer;
+        this.lecturer.add(lecturer);
     }
 }

@@ -8,7 +8,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Data
 @Entity
@@ -25,7 +27,7 @@ public class User implements UserDetails {
     private String username;
     private String password;
     private String email;
-    private String location;
+    private Map<Double, Double> location = new HashMap<>();
     @Enumerated(value = EnumType.STRING)
     private Role role;
 
@@ -44,6 +46,14 @@ public class User implements UserDetails {
         this.username = username;
         this.password = password;
         this.email = email;
+    }
+
+    public Map<Double, Double> getLocation() {
+        return location;
+    }
+
+    public void setLocation(Map<Double, Double> location) {
+        this.location = location;
     }
 
     public Long getId() {
@@ -88,14 +98,6 @@ public class User implements UserDetails {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
     }
 
     public Role getRole() {

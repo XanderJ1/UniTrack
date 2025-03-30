@@ -3,6 +3,7 @@ package com.bash.Unitrack.Data.Models;
 import ch.qos.logback.core.sift.Discriminator;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import lombok.Data;
 
@@ -16,7 +17,8 @@ public class Lecturer extends User {
     private String lecturerId;
     private String name;
     private String department;
-
+    @ManyToMany
+    private List<Course> courses;
     @OneToMany
     private List<Session> sessions;
     @OneToMany

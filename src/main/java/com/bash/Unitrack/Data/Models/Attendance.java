@@ -2,13 +2,16 @@
 
     import com.fasterxml.jackson.annotation.JsonBackReference;
     import jakarta.persistence.*;
+    import lombok.AllArgsConstructor;
     import lombok.Data;
 
     import java.time.Instant;
+    import java.util.ArrayList;
     import java.util.List;
 
     @Data
     @Entity
+    @AllArgsConstructor
     public class Attendance {
 
         @Id
@@ -20,16 +23,19 @@
         private Instant time;
         @OneToOne
         private Course course;
-        @ManyToMany
-        private List<Student> student;
+        @ManyToMany(mappedBy = "attendance")
+        private List<Student> students = new ArrayList<>();
         @OneToOne
         private Lecturer lecturer;
-        private Status status;
-
         public Attendance(){
 
         }
 
+        public Attendance(Session session, Instant time, Lecturer lecturer, Status status){
+            this.session = session;
+            this.time = time;
+            this.lecturer = lecturer;
+        }
         public Long getId() {
             return id;
         }
@@ -63,11 +69,11 @@
         }
 
         public List<Student> getStudent() {
-            return student;
+            return students;
         }
 
         public void setStudent(List<Student> student) {
-            this.student = student;
+            this.students = student;
         }
 
         public Lecturer getLecturer() {
@@ -78,20 +84,6 @@
             this.lecturer = lecturer;
         }
 
-        public Status getStatus() {
-            return status;
-        }
-
-        public void setStatus(Status status) {
-            this.status = status;
-        }
-
-        public Attendance(Session session, Instant time, Lecturer lecturer, Status status){
-            this.session = session;
-            this.time = time;
-            this.lecturer = lecturer;
-            this.status = status;
-        }
 
 
     }

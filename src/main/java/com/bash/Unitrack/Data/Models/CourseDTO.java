@@ -7,7 +7,7 @@ public class CourseDTO {
 
     private String courseName;
     private String courseCode;
-    private String lecturerID;
+    private Long lecturerID;
 
 
     public String getCourseName() {
@@ -26,11 +26,11 @@ public class CourseDTO {
         this.courseCode = courseCode;
     }
 
-    public String getLecturerID() {
+    public Long getLecturerID() {
         return lecturerID;
     }
 
-    public void setLecturerID(String lecturerID) {
+    public void setLecturerID(Long lecturerID) {
         this.lecturerID = lecturerID;
     }
 }

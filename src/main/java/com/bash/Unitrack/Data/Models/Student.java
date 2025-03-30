@@ -1,9 +1,6 @@
 package com.bash.Unitrack.Data.Models;
 
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.List;
@@ -17,7 +14,11 @@ public class Student extends User{
     private String program;
 
     @ManyToMany
-    private List<Attendance> attendance;
+    @JoinTable(
+            name = "student_attendance",
+            joinColumns = @JoinColumn(name = "student_id"),
+            inverseJoinColumns = @JoinColumn(name = "attendance_id")
+    )    private List<Attendance> attendance;
     @ManyToMany
     private List<Course> courses;
 
