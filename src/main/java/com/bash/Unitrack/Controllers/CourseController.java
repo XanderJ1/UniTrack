@@ -2,10 +2,7 @@ package com.bash.Unitrack.Controllers;
 
 import com.bash.Unitrack.Data.Models.Course;
 import com.bash.Unitrack.Data.Models.CourseDTO;
-import com.bash.Unitrack.Data.Models.Lecturer;
-import com.bash.Unitrack.Data.Models.Role;
-import com.bash.Unitrack.Repositories.CourseRepository;
-import com.bash.Unitrack.Repositories.UserRepository;
+import com.bash.Unitrack.Exceptions.NotFoundException;
 import com.bash.Unitrack.Service.CourseService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,8 +25,9 @@ public class CourseController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<String > bash(@RequestBody CourseDTO courseDTO){
+    public ResponseEntity<String > bash(@RequestBody CourseDTO courseDTO) throws NotFoundException {
         return courseService.addCourse(courseDTO);
     }
 
 }
+

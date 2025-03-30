@@ -2,6 +2,7 @@ package com.bash.Unitrack.Controllers;
 
 import com.bash.Unitrack.Data.DTO.SessionDTO;
 import com.bash.Unitrack.Data.Models.Session;
+import com.bash.Unitrack.Exceptions.NotFoundException;
 import com.bash.Unitrack.Service.SessionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +25,7 @@ public class SessionController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<String > create(@RequestBody SessionDTO sessionDTO){
+    public ResponseEntity<String > create(@RequestBody SessionDTO sessionDTO) throws NotFoundException {
         return sessionService.createSession(sessionDTO);
     }
 }
