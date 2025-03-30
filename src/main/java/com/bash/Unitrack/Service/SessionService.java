@@ -2,6 +2,7 @@ package com.bash.Unitrack.Service;
 
 import com.bash.Unitrack.Data.DTO.SessionDTO;
 import com.bash.Unitrack.Data.Models.*;
+import com.bash.Unitrack.Exceptions.NotFoundException;
 import com.bash.Unitrack.Repositories.AttendanceRepository;
 import com.bash.Unitrack.Repositories.CourseRepository;
 import com.bash.Unitrack.Repositories.SessionRepository;
@@ -42,16 +43,14 @@ public class SessionService {
         return ResponseEntity.ok(sessionRepository.findAll());
     }
 
-    public ResponseEntity<String> createSession(SessionDTO sessionDTO) {
+    public ResponseEntity<String> createSession(SessionDTO sessionDTO) throws NotFoundException {
 
         Object object = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Jwt jwt = (Jwt) object;
         String  username = jwt.getSubject();
-        Optional<User> user = userRepository.findByUsername(username);
-        if (user.isEmpty()){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User does not exist");
-        }
-        if (user.get().getRole().equals(Role.STUDENT)){
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new NotFoundException("User does not exist"));
+        if (user.getRole().equals(Role.STUDENT)){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You should be a lecturer to create a session");
         }
         Optional<Course> courseOptional = courseRepository.findByCourseName(sessionDTO.getCourse());
@@ -59,7 +58,7 @@ public class SessionService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Course does not exist");
         }
         Course course = courseOptional.get();
-        Lecturer lecturer = (Lecturer) user.get();
+        Lecturer lecturer = (Lecturer) user;
         Session session = new Session();
         Attendance attendance = new Attendance();
         userRepository.save(lecturer);
@@ -79,7 +78,7 @@ public class SessionService {
         session.setLecturer(lecturer);
         session.setStartTime(Instant.now());
         session.setStatus(Stat.ACTIVE);
-        session.setEndTime(Instant.now().plusSeconds(3600));
+        session.setEndTime(Instant.now().plusSeconds(30));
 
         sessionRepository.save(session);
 

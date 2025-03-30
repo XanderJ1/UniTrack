@@ -1,6 +1,7 @@
 package com.bash.Unitrack.Service;
 
 import com.bash.Unitrack.Data.Models.*;
+import com.bash.Unitrack.Exceptions.NotFoundException;
 import com.bash.Unitrack.Repositories.CourseRepository;
 import com.bash.Unitrack.Repositories.UserRepository;
 import org.springframework.http.HttpStatus;
@@ -8,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CourseService {
@@ -25,18 +25,15 @@ public class CourseService {
         return ResponseEntity.ok(courseRepository.findAll());
     }
 
-    public ResponseEntity<String> addCourse(CourseDTO courseDTO) {
+    public ResponseEntity<String> addCourse(CourseDTO courseDTO) throws NotFoundException {
 
-        Optional<User> lecturerOptional = userRepository.findById(2L);
+        User user = userRepository.findById(courseDTO.getLecturerID())
+                .orElseThrow(() -> new NotFoundException("User does not exist"));
 
-        if (lecturerOptional.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User does not exist");
-        }
-
-        if (!(lecturerOptional.get() instanceof Lecturer)){
+        if (!(user instanceof Lecturer)){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Only lecturers can be assigned courses");
         }
-        Lecturer lecturer = (Lecturer) lecturerOptional.get();
+        Lecturer lecturer = (Lecturer) user;
         Course newCourse = new Course(courseDTO.getCourseName(), courseDTO.getCourseCode(), lecturer);
         courseRepository.save(newCourse);
         return ResponseEntity.status(HttpStatus.CREATED).body("Successfully created");
