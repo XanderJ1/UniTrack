@@ -1,5 +1,6 @@
 package com.bash.Unitrack.Security;
 
+import com.bash.Unitrack.Data.Models.Role;
 import com.bash.Unitrack.Service.UserService;
 import com.bash.Unitrack.Utilities.RSAKeyProperties;
 import com.nimbusds.jose.jwk.JWK;
@@ -56,7 +57,9 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests((auth) -> {
                     auth.requestMatchers("/auth/**").permitAll();
-                    auth.requestMatchers("api/v1/users/**").permitAll();
+                    auth.requestMatchers("api/v1/users/delete").hasRole("ADMIN");
+                    auth.requestMatchers("api/v1/users/update").hasRole("ADMIN");
+                    auth.requestMatchers("api/v1/courses/add").hasRole("ADMIN");
                     auth.anyRequest().authenticated();
                 })
                 .oauth2ResourceServer((oauth) -> oauth.jwt(jwt -> jwt
@@ -64,7 +67,6 @@ public class SecurityConfig {
                         .jwtAuthenticationConverter(jwtAuthConverter())
                 ))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-
         return http.build();
     }
 
@@ -84,10 +86,11 @@ public class SecurityConfig {
     JwtAuthenticationConverter jwtAuthConverter(){
         JwtGrantedAuthoritiesConverter jwtAuthConverter = new JwtGrantedAuthoritiesConverter();
         jwtAuthConverter.setAuthoritiesClaimName("roles");
-        jwtAuthConverter.setAuthorityPrefix("ROLES_");
+        jwtAuthConverter.setAuthorityPrefix("ROLE_");
 
         JwtAuthenticationConverter jwt = new JwtAuthenticationConverter();
         jwt.setJwtGrantedAuthoritiesConverter(jwtAuthConverter);
+
         return jwt;
     }
 }
