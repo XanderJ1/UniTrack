@@ -27,6 +27,7 @@
         private List<Student> students = new ArrayList<>();
         @OneToOne
         private Lecturer lecturer;
+        private Location location;
         public Attendance(){
 
         }
@@ -36,6 +37,23 @@
             this.time = time;
             this.lecturer = lecturer;
         }
+
+        public List<Student> getStudents() {
+            return students;
+        }
+
+        public void setStudents(List<Student> students) {
+            this.students = students;
+        }
+
+        public Location getLocation() {
+            return location;
+        }
+
+        public void setLocation(Location location) {
+            this.location = location;
+        }
+
         public Long getId() {
             return id;
         }

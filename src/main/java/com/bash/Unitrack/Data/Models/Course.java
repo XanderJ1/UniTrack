@@ -14,7 +14,7 @@ public class Course {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String courseName;
-    private String courseId;
+    private String courseCode;
     @OneToOne
     private Attendance attendance;
     @OneToOne
@@ -30,7 +30,7 @@ public class Course {
 
     public Course(String courseName, String courseId, Lecturer lecturer){
         this.courseName = courseName;
-        this.courseId = courseId;
+        this.courseCode = courseId;
         this.lecturer.add(lecturer);
     }
 
@@ -42,12 +42,12 @@ public class Course {
         this.courseName = courseName;
     }
 
-    public String getCourseId() {
-        return courseId;
+    public String getCourseCode() {
+        return courseCode;
     }
 
-    public void setCourseId(String courseId) {
-        this.courseId = courseId;
+    public void setCourseCode(String courseId) {
+        this.courseCode = courseId;
     }
 
     public List<Student> getStudent() {

@@ -74,6 +74,7 @@ public class SessionService {
 
         //Setup Session
         session.setAttendance(attendance);
+        session.setLocation(sessionDTO.getLocation());
         session.setCourse(course);
         session.setLecturer(lecturer);
         session.setStartTime(Instant.now());

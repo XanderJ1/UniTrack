@@ -1,5 +1,6 @@
 package com.bash.Unitrack.Service;
 
+import com.bash.Unitrack.Data.DTO.CourseDTO;
 import com.bash.Unitrack.Data.Models.*;
 import com.bash.Unitrack.Exceptions.NotFoundException;
 import com.bash.Unitrack.Repositories.CourseRepository;
@@ -27,7 +28,7 @@ public class CourseService {
 
     public ResponseEntity<String> addCourse(CourseDTO courseDTO) throws NotFoundException {
 
-        User user = userRepository.findById(courseDTO.getLecturerID())
+        User user = userRepository.findById(courseDTO.getLecturerId())
                 .orElseThrow(() -> new NotFoundException("User does not exist"));
 
         if (!(user instanceof Lecturer)){
