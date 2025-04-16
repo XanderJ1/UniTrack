@@ -27,7 +27,8 @@ public class User implements UserDetails {
     private String username;
     private String password;
     private String email;
-    private Map<Double, Double> location = new HashMap<>();
+    @Embedded
+    private Location location;
     @Enumerated(value = EnumType.STRING)
     private Role role;
 
@@ -48,11 +49,11 @@ public class User implements UserDetails {
         this.email = email;
     }
 
-    public Map<Double, Double> getLocation() {
+    public Location getLocation() {
         return location;
     }
 
-    public void setLocation(Map<Double, Double> location) {
+    public void setLocation(Location location) {
         this.location = location;
     }
 

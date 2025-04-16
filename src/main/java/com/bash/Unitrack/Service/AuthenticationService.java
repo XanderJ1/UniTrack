@@ -14,9 +14,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -42,6 +44,17 @@ public class AuthenticationService {
         this.tokenService = tokenService;
     }
 
+    public String getUsername(){
+        Object context = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Jwt jwt = (Jwt) context;
+        return jwt.getSubject();
+    }
+
+    public Long getId(){
+        Object context = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Jwt jwt = (Jwt) context;
+        return jwt.getClaim("user_id");
+    }
 
     public ResponseEntity<String> register(UserDTO userDTO) throws BadCredentialsException {
         if (userDTO.getUsername() == null || userDTO.getPassword() == null || userDTO.getRole() == null) {
@@ -80,7 +93,6 @@ public class AuthenticationService {
         }
 
     }
-
 
     public ResponseEntity<String> signIn(UserDTO userDTO) throws BadCredentialsException {
 

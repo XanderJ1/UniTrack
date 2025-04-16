@@ -17,4 +17,11 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> BadCredentials(BadCredentialsException ex){
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
+
+    @ExceptionHandler(OutOfRangeException.class)
+    public ResponseEntity<String> OutOfRange(OutOfRangeException ex){
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage());
+    }
+
+
 }

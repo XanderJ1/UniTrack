@@ -6,6 +6,7 @@ import com.bash.Unitrack.Data.DTO.SessionDTO;
 import com.bash.Unitrack.Data.Models.Attendance;
 import com.bash.Unitrack.Exceptions.NotFoundException;
 import com.bash.Unitrack.Service.AttendanceService;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,8 +28,11 @@ public class AttendanceController {
     }
 
     @PostMapping("/mark")
-    public ResponseEntity<String > createAttendance(@RequestBody AttendanceDTO attendance) throws NotFoundException {
-        return attendanceService.create(attendance);
+    public ResponseEntity<String > createAttendance(
+            @RequestBody AttendanceDTO attendance,
+            @RequestParam(required = false) Long id)
+            throws NotFoundException {
+        return attendanceService.create(attendance, id);
     }
 
 

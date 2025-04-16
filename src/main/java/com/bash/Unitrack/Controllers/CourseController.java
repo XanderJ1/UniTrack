@@ -1,7 +1,7 @@
 package com.bash.Unitrack.Controllers;
 
 import com.bash.Unitrack.Data.Models.Course;
-import com.bash.Unitrack.Data.Models.CourseDTO;
+import com.bash.Unitrack.Data.DTO.CourseDTO;
 import com.bash.Unitrack.Exceptions.NotFoundException;
 import com.bash.Unitrack.Service.CourseService;
 import org.springframework.http.ResponseEntity;

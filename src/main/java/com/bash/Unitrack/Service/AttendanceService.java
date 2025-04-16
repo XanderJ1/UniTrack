@@ -8,14 +8,12 @@ import com.bash.Unitrack.Repositories.SessionRepository;
 import com.bash.Unitrack.Repositories.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class AttendanceService {
@@ -23,23 +21,25 @@ public class AttendanceService {
     public final AttendanceRepository attendanceRepository;
     public final UserRepository userRepository;
     public final SessionRepository sessionRepository;
+    public final AuthenticationService authenticationService;
 
     Session sessions = new Session();
 
     public AttendanceService(
             AttendanceRepository attendanceRepository,
             UserRepository userRepository,
-            SessionRepository sessionRepository){
+            SessionRepository sessionRepository, AuthenticationService authenticationService){
         this.attendanceRepository = attendanceRepository;
         this.userRepository = userRepository;
         this.sessionRepository = sessionRepository;
+        this.authenticationService = authenticationService;
     }
 
     public ResponseEntity<List<Attendance>> fetchAttendance() {
         return ResponseEntity.ok(attendanceRepository.findAll());
     }
 
-    public ResponseEntity<String> create(AttendanceDTO attendanceDTO) throws NotFoundException {
+    public ResponseEntity<String> create(AttendanceDTO attendanceDTO, @RequestParam(required = false) Long id) throws NotFoundException {
 
         Session session = sessionRepository.findById(attendanceDTO.getSessionId())
                 .orElseThrow(() -> new NotFoundException("Session does not exist"));
@@ -50,15 +50,13 @@ public class AttendanceService {
 
         Student student = new Student();
 
-        Object context = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Jwt jwt = (Jwt) context;
-        String username = jwt.getSubject();
-        User currentUser = userRepository.findByUsername(username).get();
+        String username = authenticationService.getUsername();
+        User currentUser = userRepository.findByUsername(username).orElseThrow();
         if (currentUser instanceof Lecturer){
-            User user = userRepository.findById(attendanceDTO.getStudentId())
+            User user = userRepository.findById(id)
                     .orElseThrow(() -> new NotFoundException("Student does not exist"));
 
-            if (!(student instanceof Student)){
+            if (!(user instanceof Student)){
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User is not a student");
             }
             student = (Student) user;
@@ -75,6 +73,7 @@ public class AttendanceService {
         List<Student> students = new ArrayList<>();
         students.add(student);
         attendance.setStudent(students);
+        attendance.setLocation(attendanceDTO.getLocation());
         student.getAttendance().add(attendance);
         attendanceRepository.save(attendance);
         userRepository.save(student);

@@ -15,8 +15,8 @@ public class Session {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
-    private Instant startTime;   //Will be changed to Date/Time
-    private Instant endTime;     //Will be changed to Date/Time
+    private Instant startTime;
+    private Instant endTime;
     private Stat status;
     @OneToOne
     private Course course;
@@ -25,6 +25,8 @@ public class Session {
     @OneToOne
     @JsonManagedReference
     private Attendance attendance;
+    @Embedded
+    private Location location;
 
     public Session(){
 
@@ -84,6 +86,14 @@ public class Session {
 
     public void setAttendance(Attendance attendance) {
         this.attendance = attendance;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
     }
 
     public Session(Instant startTime, Lecturer lecturer, Attendance attendance){
