@@ -37,7 +37,7 @@ public class TokenService {
                 .issuedAt(now)
                 .subject(user.getUsername())
                 .claim("roles", scope)
-                .claim("user_id", user.getUsername())
+                .claim("user_id", user.getId())
                 .expiresAt(now.plusSeconds(5000))
                 .build();
         System.out.println(claimsSet.getClaims());
