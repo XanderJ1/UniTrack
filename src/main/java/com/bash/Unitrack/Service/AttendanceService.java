@@ -6,10 +6,16 @@ import com.bash.Unitrack.Exceptions.NotFoundException;
 import com.bash.Unitrack.Repositories.AttendanceRepository;
 import com.bash.Unitrack.Repositories.SessionRepository;
 import com.bash.Unitrack.Repositories.UserRepository;
+import com.bash.Unitrack.Utilities.RequestClass;
+import com.bash.Unitrack.Utilities.RouteRequest;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -22,24 +28,49 @@ public class AttendanceService {
     public final UserRepository userRepository;
     public final SessionRepository sessionRepository;
     public final AuthenticationService authenticationService;
+    private final WebClient webclient;
 
     Session sessions = new Session();
 
     public AttendanceService(
             AttendanceRepository attendanceRepository,
             UserRepository userRepository,
-            SessionRepository sessionRepository, AuthenticationService authenticationService){
+            SessionRepository sessionRepository,
+            WebClient webclient,
+            AuthenticationService authenticationService){
         this.attendanceRepository = attendanceRepository;
         this.userRepository = userRepository;
         this.sessionRepository = sessionRepository;
         this.authenticationService = authenticationService;
+        this.webclient = webclient;
     }
 
     public ResponseEntity<List<Attendance>> fetchAttendance() {
         return ResponseEntity.ok(attendanceRepository.findAll());
     }
 
-    public ResponseEntity<String> create(AttendanceDTO attendanceDTO, @RequestParam(required = false) Long id) throws NotFoundException {
+    public ResponseEntity<String> commandLineRunner(
+            Location lecturerLocation,
+            Location studentLocation) throws JsonProcessingException {
+
+        String apiKey = "AIzaSyBdMRVS5_VcpweMHk27ZP_GkXFWMHmEgco";
+
+        RequestClass request = new RequestClass(
+                lecturerLocation.getLatitude(), lecturerLocation.getLongitude()-4,
+                studentLocation.getLatitude(), studentLocation.getLongitude()-3);
+
+        request.setTravelMode("DRIVE");
+        RouteRequest routeRequest = new RouteRequest(webclient);
+
+        String value = routeRequest.computeRoute(request, apiKey)
+                .block();
+
+        ObjectMapper mapper = new ObjectMapper();
+        System.out.println(mapper.writeValueAsString(request));
+        return ResponseEntity.ok(value);
+    }
+
+    public ResponseEntity<String> create(AttendanceDTO attendanceDTO, @RequestParam(required = false) Long id) throws NotFoundException, JsonProcessingException {
 
         Session session = sessionRepository.findById(attendanceDTO.getSessionId())
                 .orElseThrow(() -> new NotFoundException("Session does not exist"));
@@ -77,6 +108,7 @@ public class AttendanceService {
         student.getAttendance().add(attendance);
         attendanceRepository.save(attendance);
         userRepository.save(student);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Attendance Marked");
+        return ResponseEntity.status(HttpStatus.CREATED).body("Attendance Marked" +
+                commandLineRunner(session.getLocation(), attendance.getLocation()).getBody());
     }
 }

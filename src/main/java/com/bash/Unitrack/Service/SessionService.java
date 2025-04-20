@@ -43,6 +43,10 @@ public class SessionService {
         return ResponseEntity.ok(sessionRepository.findAll());
     }
 
+
+    public Boolean isInRange(Location studentLocation, Location lecturerLocation){
+        return null;
+    }
     public ResponseEntity<String> createSession(SessionDTO sessionDTO) throws NotFoundException {
 
         Object object = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -79,7 +83,7 @@ public class SessionService {
         session.setLecturer(lecturer);
         session.setStartTime(Instant.now());
         session.setStatus(Stat.ACTIVE);
-        session.setEndTime(Instant.now().plusSeconds(30));
+        session.setEndTime(Instant.now().plusSeconds(60));
 
         sessionRepository.save(session);
 

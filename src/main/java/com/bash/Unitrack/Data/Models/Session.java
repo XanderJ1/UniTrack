@@ -18,9 +18,9 @@ public class Session {
     private Instant startTime;
     private Instant endTime;
     private Stat status;
-    @OneToOne
+    @ManyToOne
     private Course course;
-    @OneToOne
+    @ManyToOne
     private Lecturer lecturer;
     @OneToOne
     @JsonManagedReference

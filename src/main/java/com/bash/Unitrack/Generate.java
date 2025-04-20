@@ -32,7 +32,6 @@ public class Generate {
         this.courseRepository = courseRepository;
         this.objectMapper = objectMapper;
     }
-
     @Bean
     public CommandLineRunner commandLineRunner(){
 
@@ -75,10 +74,10 @@ public class Generate {
                     Course course = new Course();
                     course.setCourseCode(courseDTO.getCourseCode());
                     course.setCourseName(courseDTO.getCourseName());
-                    Optional<User> user = userRepository.findById(courseDTO.getLecturerId());
+                    User user = userRepository.findById(courseDTO.getLecturerId()).orElseThrow(() -> new NotFoundException("User not found"));
                     Lecturer lecturer = new Lecturer();
-                    if (user.isPresent()){
-                        lecturer = (Lecturer) user.get();
+                    if (user instanceof Lecturer){
+                        lecturer = (Lecturer) user;
                         course.setLecturer(lecturer);
                     }
                     courseRepository.save(course);

@@ -4,6 +4,7 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.reactive.function.client.WebClient;
 
 @Configuration
 public class Miscellaneous {
@@ -16,5 +17,10 @@ public class Miscellaneous {
                         .version("1.0")
                         .description("API documentation for Unitrack")
                 );
+    }
+
+    @Bean
+    public WebClient webClient(WebClient.Builder builder){
+        return builder.build();
     }
 }
