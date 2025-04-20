@@ -15,8 +15,8 @@ public class Course {
     private Long id;
     private String courseName;
     private String courseCode;
-    @OneToOne
-    private Attendance attendance;
+    @OneToMany
+    private List<Attendance> attendance;
     @OneToOne
     private Session session;
     @OneToMany

@@ -32,6 +32,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.Arrays;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -64,6 +66,7 @@ public class SecurityConfig {
                     auth.requestMatchers("/auth/**").permitAll();
                     auth.requestMatchers("api/v1/users/delete").hasRole("ADMIN");
                     auth.requestMatchers("api/v1/users/update").hasRole("ADMIN");
+                    auth.requestMatchers("/google/**").permitAll();
                     auth.requestMatchers("api/v1/courses/add").hasRole("ADMIN");
                     auth.anyRequest().authenticated();
                 })
@@ -105,7 +108,10 @@ public class SecurityConfig {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.addAllowedHeader("*");
         corsConfiguration.addAllowedMethod("*");
-        corsConfiguration.addAllowedOrigin("http://127.0.0.1:5500");
+        corsConfiguration.setAllowedOrigins(Arrays.asList(
+                "http://127.0.0.1:5500",
+                "http://localhost:8000"
+        ));
         corsConfiguration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

@@ -21,11 +21,11 @@
         @JsonBackReference
         private Session session;
         private Instant time;
-        @OneToOne
+        @ManyToOne
         private Course course;
         @ManyToMany(mappedBy = "attendance")
         private List<Student> students = new ArrayList<>();
-        @OneToOne
+        @ManyToOne
         private Lecturer lecturer;
         private Location location;
         public Attendance(){
