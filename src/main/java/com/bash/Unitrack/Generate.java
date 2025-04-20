@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.io.File;
@@ -42,6 +43,7 @@ public class Generate {
         };
     }
 
+    @Profile({"local", "deploy"})
     @Bean
     public CommandLineRunner userDetailLoader() throws NotFoundException {
 
