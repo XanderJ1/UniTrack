@@ -39,11 +39,13 @@ public class Generate {
         User user1 = new User("bash", passwordEncoder.encode("admin"), Role.ADMIN,"bash@gmail");
         System.out.println(user1.getPassword());
         return args -> {
-            userRepository.save(user1);
+            if (userRepository.findByUsername("bash").isEmpty()){
+                userRepository.save(user1);
+            }
         };
     }
 
-    @Profile({"local", "deploy"})
+    @Profile("local")
     @Bean
     public CommandLineRunner userDetailLoader() throws NotFoundException {
 
