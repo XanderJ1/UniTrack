@@ -1,8 +1,11 @@
 package com.bash.Unitrack.Data.Models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -18,7 +21,9 @@ public class Student extends User{
             name = "student_attendance",
             joinColumns = @JoinColumn(name = "student_id"),
             inverseJoinColumns = @JoinColumn(name = "attendance_id")
-    )    private List<Attendance> attendance;
+    )
+    @JsonBackReference
+    private List<Attendance> attendance = new ArrayList<>();
     @ManyToMany
     private List<Course> courses;
 

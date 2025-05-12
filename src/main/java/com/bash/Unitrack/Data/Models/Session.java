@@ -1,5 +1,6 @@
 package com.bash.Unitrack.Data.Models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -21,6 +22,7 @@ public class Session {
     @ManyToOne
     private Course course;
     @ManyToOne
+    @JsonManagedReference
     private Lecturer lecturer;
     @OneToOne
     @JsonManagedReference
