@@ -1,6 +1,7 @@
     package com.bash.Unitrack.Data.Models;
 
     import com.fasterxml.jackson.annotation.JsonBackReference;
+    import com.fasterxml.jackson.annotation.JsonManagedReference;
     import jakarta.persistence.*;
     import lombok.AllArgsConstructor;
     import lombok.Data;
@@ -24,8 +25,10 @@
         @ManyToOne
         private Course course;
         @ManyToMany(mappedBy = "attendance")
+        @JsonManagedReference
         private List<Student> students = new ArrayList<>();
         @ManyToOne
+        @JsonManagedReference
         private Lecturer lecturer;
         private Location location;
         public Attendance(){

@@ -7,8 +7,10 @@ import com.bash.Unitrack.Repositories.AttendanceRepository;
 import com.bash.Unitrack.Repositories.CourseRepository;
 import com.bash.Unitrack.Repositories.SessionRepository;
 import com.bash.Unitrack.Repositories.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -43,6 +45,17 @@ public class SessionService {
         return ResponseEntity.ok(sessionRepository.findAll());
     }
 
+    @Scheduled(fixedRate = 60000)
+    @Transactional
+    public void closeExpiredSession(){
+        List<Session> activeSession = sessionRepository.findByStatus(Stat.ACTIVE);
+        for (Session session : activeSession){
+            if (session.getEndTime().isBefore(Instant.now())) {
+                session.setStatus(Stat.CLOSED);
+                sessionRepository.save(session);
+            }
+        }
+    }
 
     public Boolean isInRange(Location studentLocation, Location lecturerLocation){
         return null;

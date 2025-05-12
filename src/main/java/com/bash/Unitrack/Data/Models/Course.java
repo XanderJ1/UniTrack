@@ -1,6 +1,7 @@
 package com.bash.Unitrack.Data.Models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -13,7 +14,9 @@ public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(unique = true)
     private String courseName;
+    @Column(unique = true)
     private String courseCode;
     @OneToMany
     private List<Attendance> attendance;

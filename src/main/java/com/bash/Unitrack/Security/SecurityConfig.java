@@ -63,11 +63,15 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests((auth) -> {
+                            auth.requestMatchers(
+                            "/swagger-ui.html",
+                            "/swagger-ui/**",
+                            "/v3/api-docs/**"
+                    ).permitAll();
                     auth.requestMatchers("/auth/**").permitAll();
-                    auth.requestMatchers("api/v1/users/delete").hasRole("ADMIN");
-                    auth.requestMatchers("api/v1/users/update").hasRole("ADMIN");
-                    auth.requestMatchers("/google/**").permitAll();
-                    auth.requestMatchers("api/v1/courses/add").hasRole("ADMIN");
+                    auth.requestMatchers("/api/v1/users/delete").hasRole("ADMIN");
+                    auth.requestMatchers("/api/v1/users/update").hasRole("ADMIN");
+                    auth.requestMatchers("/api/v1/courses/add").hasRole("ADMIN");
                     auth.anyRequest().authenticated();
                 })
                 .oauth2ResourceServer((oauth) -> oauth.jwt(jwt -> jwt
@@ -110,7 +114,8 @@ public class SecurityConfig {
         corsConfiguration.addAllowedMethod("*");
         corsConfiguration.setAllowedOrigins(Arrays.asList(
                 "http://127.0.0.1:5500",
-                "http://localhost:8000"
+                "http://localhost:8000",
+                "https://unitrackk.netlify.app"
         ));
         corsConfiguration.setAllowCredentials(true);
 
