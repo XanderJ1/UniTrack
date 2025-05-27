@@ -2,7 +2,7 @@ package com.bash.Unitrack.Data.DTO;
 
 import com.bash.Unitrack.Data.Models.Location;
 
-public class AttendanceDTO {
+public class AttendanceRequestDTO {
     private Long sessionId;
     private Location location;
 

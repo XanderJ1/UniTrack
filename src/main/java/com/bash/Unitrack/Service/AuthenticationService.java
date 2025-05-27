@@ -1,7 +1,7 @@
 package com.bash.Unitrack.Service;
 
-import com.bash.Unitrack.Controllers.AuthenticationController;
-import com.bash.Unitrack.Data.DTO.UserDTO;
+import com.bash.Unitrack.Data.DTO.SignInDTO;
+import com.bash.Unitrack.Data.DTO.UserRequest;
 import com.bash.Unitrack.Data.Models.Lecturer;
 import com.bash.Unitrack.Data.Models.Role;
 import com.bash.Unitrack.Data.Models.Student;
@@ -15,13 +15,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class AuthenticationService {
@@ -56,34 +52,34 @@ public class AuthenticationService {
         return jwt.getClaim("user_id");
     }
 
-    public ResponseEntity<String> register(UserDTO userDTO) throws BadCredentialsException {
-        if (userDTO.getUsername() == null || userDTO.getPassword() == null || userDTO.getRole() == null) {
+    public ResponseEntity<String> register(UserRequest userRequest) throws BadCredentialsException {
+        if (userRequest.getUsername() == null || userRequest.getPassword() == null || userRequest.getRole() == null) {
             throw new BadCredentialsException("Enter credentials");
         }
-        if (userRepository.findByUsername(userDTO.getUsername()).isPresent()) {
+        if (userRepository.findByUsername(userRequest.getUsername()).isPresent()) {
             throw new BadCredentialsException("User already exists");
         }
         else {
 
             User newUser = new User();
-            if (userDTO.getRole().equals("LECTURER")){
+            if (userRequest.getRole().equals("LECTURER")){
                 newUser = new Lecturer();
-                BeanUtils.copyProperties(userDTO, newUser);
-                newUser.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+                BeanUtils.copyProperties(userRequest, newUser);
+                newUser.setPassword(passwordEncoder.encode(userRequest.getPassword()));
                 newUser.setRole(Role.LECTURER);
             }
 
-            if (userDTO.getRole().equals("STUDENT")){
+            if (userRequest.getRole().equals("STUDENT")){
                 newUser = new Student();
-                BeanUtils.copyProperties(userDTO, newUser);
-                newUser.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+                BeanUtils.copyProperties(userRequest, newUser);
+                newUser.setPassword(passwordEncoder.encode(userRequest.getPassword()));
                 newUser.setRole(Role.STUDENT);
             }
 
-            if (userDTO.getRole().equals("ADMIN")){
+            if (userRequest.getRole().equals("ADMIN")){
                 newUser = new User();
-                BeanUtils.copyProperties(userDTO, newUser);
-                newUser.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+                BeanUtils.copyProperties(userRequest, newUser);
+                newUser.setPassword(passwordEncoder.encode(userRequest.getPassword()));
                 newUser.setRole(Role.ADMIN);
             }
 
@@ -94,16 +90,18 @@ public class AuthenticationService {
 
     }
 
-    public ResponseEntity<String> signIn(UserDTO userDTO) throws BadCredentialsException {
+    public ResponseEntity<SignInDTO> signIn(UserRequest userRequest) throws BadCredentialsException {
 
-        if (userDTO.getUsername() == null || userDTO.getPassword() == null) {
+        if (userRequest.getUsername() == null || userRequest.getPassword() == null) {
             throw new BadCredentialsException("Enter username and password");
         }
 
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken
-                        (userDTO.getUsername(), userDTO.getPassword()));
+                        (userRequest.getUsername(), userRequest.getPassword()));
         User user = (User) authentication.getPrincipal();
-        return ResponseEntity.ok(tokenService.generate(user));
+        String role = user.getRole().toString();
+        String jwt = tokenService.generate(user);
+        return ResponseEntity.ok(new SignInDTO(jwt, role));
     }
 }

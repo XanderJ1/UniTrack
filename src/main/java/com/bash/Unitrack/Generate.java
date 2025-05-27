@@ -1,7 +1,7 @@
 package com.bash.Unitrack;
 
 import com.bash.Unitrack.Data.DTO.CourseDTO;
-import com.bash.Unitrack.Data.DTO.UserDTO;
+import com.bash.Unitrack.Data.DTO.UserRequest;
 import com.bash.Unitrack.Data.Models.*;
 import com.bash.Unitrack.Exceptions.NotFoundException;
 import com.bash.Unitrack.Repositories.CourseRepository;
@@ -16,7 +16,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.io.File;
 import java.util.List;
-import java.util.Optional;
 
 @Configuration
 public class Generate {
@@ -57,16 +56,16 @@ public class Generate {
             if (!studentFile.exists() || !courseFile.exists() || !lecturerFile.exists()) {
                 throw new NotFoundException("File not found: " + lecturerFile.getAbsolutePath());
             }
-            List<UserDTO> users = objectMapper.readValue(lecturerFile, new TypeReference<List<UserDTO>>(){});
-            for (UserDTO userDTO : users) {
-                if (!userRepository.existsByUsername(userDTO.getUsername())) {
+            List<UserRequest> users = objectMapper.readValue(lecturerFile, new TypeReference<List<UserRequest>>(){});
+            for (UserRequest userRequest : users) {
+                if (!userRepository.existsByUsername(userRequest.getUsername())) {
                     Lecturer user = new Lecturer();
-                    user.setUsername(userDTO.getUsername());
-                    user.setEmail(userDTO.getEmail());
-                    user.setFirstName(userDTO.getFirstName());
-                    user.setLastName(userDTO.getLastName());
+                    user.setUsername(userRequest.getUsername());
+                    user.setEmail(userRequest.getEmail());
+                    user.setFirstName(userRequest.getFirstName());
+                    user.setLastName(userRequest.getLastName());
                     user.setRole(Role.LECTURER);
-                    user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+                    user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
                     userRepository.save(user);
                 }
             }
@@ -87,17 +86,17 @@ public class Generate {
                     courseRepository.save(course);
                 }
             }
-            List<UserDTO> students = objectMapper.readValue(studentFile, new TypeReference<List<UserDTO>>(){});
-            for (UserDTO userDTO : students) {
-                if (!userRepository.existsByUsername(userDTO.getUsername())) {
+            List<UserRequest> students = objectMapper.readValue(studentFile, new TypeReference<List<UserRequest>>(){});
+            for (UserRequest userRequest : students) {
+                if (!userRepository.existsByUsername(userRequest.getUsername())) {
                     Student student = new Student();
-                    student.setUsername(userDTO.getUsername());
-                    student.setEmail(userDTO.getEmail());
-                    student.setFirstName(userDTO.getFirstName());
-                    student.setLastName(userDTO.getLastName());
-                    student.setIndexNumber(userDTO.getIndexNumber());
+                    student.setUsername(userRequest.getUsername());
+                    student.setEmail(userRequest.getEmail());
+                    student.setFirstName(userRequest.getFirstName());
+                    student.setLastName(userRequest.getLastName());
+                    student.setIndexNumber(userRequest.getIndexNumber());
                     student.setRole(Role.STUDENT);
-                    student.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+                    student.setPassword(passwordEncoder.encode(userRequest.getPassword()));
                     userRepository.save(student);
                 }
             }

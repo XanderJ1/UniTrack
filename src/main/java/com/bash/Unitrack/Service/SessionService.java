@@ -48,7 +48,11 @@ public class SessionService {
     @Scheduled(fixedRate = 60000)
     @Transactional
     public void closeExpiredSession(){
+
         List<Session> activeSession = sessionRepository.findByStatus(Stat.ACTIVE);
+        if (activeSession.isEmpty()){
+            return;
+        }
         for (Session session : activeSession){
             if (session.getEndTime().isBefore(Instant.now())) {
                 session.setStatus(Stat.CLOSED);
