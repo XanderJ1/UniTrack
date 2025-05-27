@@ -1,6 +1,8 @@
 package com.bash.Unitrack.Service;
 
 import com.bash.Unitrack.Data.DTO.UserDTO;
+import com.bash.Unitrack.Data.DTO.UserRequest;
+import com.bash.Unitrack.Data.Models.Student;
 import com.bash.Unitrack.Data.Models.User;
 import com.bash.Unitrack.Exceptions.NotFoundException;
 import com.bash.Unitrack.Repositories.UserRepository;
@@ -11,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -32,25 +35,36 @@ public class UserService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("Bad credentials"));
     }
 
-    public List<User> fetchUsers() {
-        return userRepository.findAll();
+    public List<UserDTO> fetchUsers() {
+        return userRepository.findAll().stream().map(UserDTO::new).collect(Collectors.toList());
     }
 
-    public ResponseEntity<String> update(UserDTO userDTO) throws NotFoundException {
-        User user = userRepository.findByUsername(userDTO.getUsername())
+    public ResponseEntity<String> update(UserRequest userRequest) throws NotFoundException {
+        User user = userRepository.findByUsername(userRequest.getUsername())
                 .orElseThrow(() -> new NotFoundException(message));
 
-        if (userDTO.getFirstName() != null){
-            user.setFirstName(userDTO.getFirstName());
+        if (userRequest.getFirstName() != null){
+            user.setFirstName(userRequest.getFirstName());
         }
-        if (userDTO.getLastName() != null){
-            user.setLastName(userDTO.getLastName());
+        if (userRequest.getLastName() != null){
+            user.setLastName(userRequest.getLastName());
         }
-        if (userDTO.getEmail() != null){
-            user.setEmail(userDTO.getEmail());
+        if (userRequest.getEmail() != null){
+            user.setEmail(userRequest.getEmail());
         }
-        if (userDTO.getPassword() != null){
-            user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        if (userRequest.getPassword() != null){
+            user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+        }
+
+        if (user instanceof Student student){
+            if (userRequest.getProgram() != null){
+                student.setProgram(userRequest.getProgram());
+            }
+            if (userRequest.getIndexNumber() != null){
+                student.setIndexNumber(userRequest.getIndexNumber());
+            }
+            userRepository.save(student);
+            return ResponseEntity.ok("User details updated");
         }
 
         userRepository.save(user);

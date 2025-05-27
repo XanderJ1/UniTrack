@@ -1,8 +1,8 @@
 package com.bash.Unitrack.Data.DTO;
 
-import com.bash.Unitrack.Data.Models.User;
+import com.bash.Unitrack.Data.Models.Student;
 
-public class UserDTO {
+public class StudentDTO {
 
     private String username;
     private String firstName;
@@ -11,7 +11,7 @@ public class UserDTO {
     private String IndexNumber;
     private String email;
 
-    public UserDTO(User user) {
+    public StudentDTO(Student user) {
         this.username = user.getUsername();
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();

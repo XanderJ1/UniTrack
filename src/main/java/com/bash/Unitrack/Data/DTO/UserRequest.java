@@ -1,26 +1,15 @@
 package com.bash.Unitrack.Data.DTO;
 
-import com.bash.Unitrack.Data.Models.User;
-
-public class UserDTO {
+public class UserRequest {
 
     private String username;
     private String firstName;
     private String lastName;
     private String program;
     private String IndexNumber;
+    private String password;
     private String email;
-
-    public UserDTO(User user) {
-        this.username = user.getUsername();
-        this.firstName = user.getFirstName();
-        this.lastName = user.getLastName();
-        this.email = user.getEmail();
-        this.program = ""; // or fetch from a subclass if applicable
-        this.IndexNumber = ""; // or fetch from a subclass if applicable
-    }
-
-
+    private String role;
     public String getUsername() {
         return username;
     }
@@ -35,6 +24,14 @@ public class UserDTO {
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public String getLastName() {
@@ -59,6 +56,14 @@ public class UserDTO {
 
     public void setIndexNumber(String indexNumber) {
         IndexNumber = indexNumber;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getEmail() {

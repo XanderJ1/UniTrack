@@ -1,7 +1,7 @@
 package com.bash.Unitrack.Controllers;
 
 import com.bash.Unitrack.Data.DTO.UserDTO;
-import com.bash.Unitrack.Data.Models.User;
+import com.bash.Unitrack.Data.DTO.UserRequest;
 import com.bash.Unitrack.Exceptions.NotFoundException;
 import com.bash.Unitrack.Service.UserService;
 import org.springframework.http.ResponseEntity;
@@ -20,13 +20,13 @@ public class UsersController {
     }
 
     @GetMapping("")
-    public List<User> fetchUser(){
+    public List<UserDTO> fetchUser(){
         return userservice.fetchUsers();
     }
 
     @PutMapping("/update")
-    public ResponseEntity<String > update(@RequestBody UserDTO userDTO) throws NotFoundException {
-        return userservice.update(userDTO);
+    public ResponseEntity<String > update(@RequestBody UserRequest userRequest) throws NotFoundException {
+        return userservice.update(userRequest);
     }
 
     @DeleteMapping("/delete/{id}")

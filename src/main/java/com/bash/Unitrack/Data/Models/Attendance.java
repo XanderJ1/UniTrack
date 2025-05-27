@@ -89,10 +89,6 @@
             this.course = course;
         }
 
-        public List<Student> getStudent() {
-            return students;
-        }
-
         public void setStudent(List<Student> student) {
             this.students = student;
         }

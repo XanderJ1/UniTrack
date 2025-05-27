@@ -1,6 +1,7 @@
 package com.bash.Unitrack.Service;
 
-import com.bash.Unitrack.Data.DTO.AttendanceDTO;
+import com.bash.Unitrack.Data.DTO.AttendanceDT0;
+import com.bash.Unitrack.Data.DTO.AttendanceRequestDTO;
 import com.bash.Unitrack.Data.Models.*;
 import com.bash.Unitrack.Exceptions.NotFoundException;
 import com.bash.Unitrack.Repositories.AttendanceRepository;
@@ -19,6 +20,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @Service
 public class AttendanceService {
@@ -46,8 +49,9 @@ public class AttendanceService {
         this.webclient = webclient;
     }
 
-    public ResponseEntity<List<Attendance>> fetchAttendance() {
-        return ResponseEntity.ok(attendanceRepository.findAll());
+    public ResponseEntity<List<AttendanceDT0>> fetchAttendance() {
+        return ResponseEntity.ok(attendanceRepository.findAll()
+                .stream().map(AttendanceDT0::new).collect(Collectors.toList()));
     }
 
     public ResponseEntity<String> range(
@@ -81,9 +85,9 @@ public class AttendanceService {
         return Haversine.calculateDistance(request);
     }
 
-    public ResponseEntity<String> create(AttendanceDTO attendanceDTO, @RequestParam(required = false) Long id) throws NotFoundException, JsonProcessingException {
+    public ResponseEntity<String> create(AttendanceRequestDTO attendanceRequestDTO, @RequestParam(required = false) Long id) throws NotFoundException, JsonProcessingException {
 
-        Session session = sessionRepository.findById(attendanceDTO.getSessionId())
+        Session session = sessionRepository.findById(attendanceRequestDTO.getSessionId())
                 .orElseThrow(() -> new NotFoundException("Session does not exist"));
 
         if (session.getStatus() == Stat.CLOSED){
@@ -93,13 +97,13 @@ public class AttendanceService {
         RequestClass requestClass = new RequestClass(
                 session.getLocation().getLatitude(),
                 session.getLocation().getLongitude(),
-                attendanceDTO.getLocation().getLatitude(),
-                attendanceDTO.getLocation().getLongitude()
+                attendanceRequestDTO.getLocation().getLatitude(),
+                attendanceRequestDTO.getLocation().getLongitude()
         );
 
         System.out.println("Haversine " + range2(requestClass));
 
-        String json = range(session.getLocation(), attendanceDTO.getLocation()).getBody();
+        String json = range(session.getLocation(), attendanceRequestDTO.getLocation()).getBody();
         System.out.println(json);
         Student student = new Student();
 
@@ -126,10 +130,25 @@ public class AttendanceService {
         List<Student> students = new ArrayList<>();
         students.add(student);
         attendance.setStudent(students);
-        attendance.setLocation(attendanceDTO.getLocation());
+        attendance.setLocation(attendanceRequestDTO.getLocation());
         student.getAttendance().add(attendance);
         attendanceRepository.save(attendance);
         userRepository.save(student);
         return ResponseEntity.status(HttpStatus.CREATED).body("Attendance Marked");
+    }
+
+    public ResponseEntity<List<Attendance>> studentAttendance(Long id) throws NotFoundException {
+
+        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("User not found"));
+        Student student = (Student) user;
+        List<Attendance> attendanceList =  student.getAttendance();
+        return ResponseEntity.status(HttpStatus.OK).body(attendanceList);
+    }
+
+    public ResponseEntity<List<Attendance>> attendance(Long id) throws NotFoundException {
+        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("User not found"));
+        Lecturer lecturer = (Lecturer) user;
+        List<Attendance> attendanceList = lecturer.getAttendance();
+        return ResponseEntity.ok(attendanceList);
     }
 }

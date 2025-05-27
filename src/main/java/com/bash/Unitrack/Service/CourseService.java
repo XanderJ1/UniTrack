@@ -39,6 +39,16 @@ public class CourseService {
         courseRepository.save(newCourse);
         return ResponseEntity.status(HttpStatus.CREATED).body("Successfully created");
     }
+
+    public ResponseEntity<List<Course>> fetchCourse(Long id) throws NotFoundException {
+        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("User does not exist"));
+        if (!(user instanceof Lecturer)){
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+        Lecturer lecturer = (Lecturer) user;
+        List<Course> courses = lecturer.getCourses();
+        return ResponseEntity.status(HttpStatus.OK).body(courses);
+    }
 }
 
 
