@@ -145,7 +145,7 @@ public class AttendanceService {
         return ResponseEntity.status(HttpStatus.OK).body(attendanceList);
     }
 
-    public ResponseEntity<List<Attendance>> attendance(Long id) throws NotFoundException {
+    public ResponseEntity<List<Attendance>> attendanceLecturer(Long id) throws NotFoundException {
         User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("User not found"));
         Lecturer lecturer = (Lecturer) user;
         List<Attendance> attendanceList = lecturer.getAttendance();

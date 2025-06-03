@@ -38,14 +38,14 @@ public class AttendanceController {
         return attendanceService.create(attendance, id);
     }
 
-    @GetMapping("/studentAttendance")
+    @GetMapping("/student")
     public ResponseEntity<List<Attendance>> studentAttendance() throws NotFoundException {
         return attendanceService.studentAttendance(authenticationService.getId());
     }
 
-    @GetMapping("/attendance")
+    @GetMapping("/lecturer")
     public ResponseEntity<List<Attendance>> attendance() throws NotFoundException {
-        return attendanceService.attendance(authenticationService.getId());
+        return attendanceService.attendanceLecturer(authenticationService.getId());
     }
 
 }

@@ -24,10 +24,9 @@ public class Lecturer extends User {
     @OneToMany
     @JsonBackReference
     private List<Session> sessions;
-    @OneToMany
+    @OneToMany(mappedBy = "lecturer")
     @JsonBackReference
     private List<Attendance> attendance;
-
     public Lecturer(){
 
     }
