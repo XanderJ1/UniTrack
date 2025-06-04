@@ -78,5 +78,11 @@ public class UserService implements UserDetailsService {
         userRepository.delete(user);
         return ResponseEntity.ok("User deleted");
     }
+
+    public UserDTO fetchUser(Long id) throws NotFoundException {
+        User user = userRepository.findById(id).
+                orElseThrow(() -> new NotFoundException(message));
+        return new UserDTO(user);
+    }
 }
 
