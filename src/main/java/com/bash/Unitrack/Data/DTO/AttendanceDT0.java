@@ -22,7 +22,7 @@ public class AttendanceDT0 {
         lecturer = attendance.getLecturer().getFirstName() + " " + attendance.getLecturer().getLastName();
         studentList = attendance.getStudents().stream().map(StudentDTO::new).collect(Collectors.toList());
         LocalDateTime dateTime = Instant.now().atZone(ZoneId.systemDefault()).toLocalDateTime();
-        time = String.valueOf(dateTime.getHour() + dateTime.getHour());
+        time = dateTime.getHour() + ":" + dateTime.getMinute();
         date = dateTime.getDayOfWeek() + ", " +
                 dateTime.getDayOfMonth() + " " + dateTime.getMonth() + ", " + dateTime.getYear();
 
