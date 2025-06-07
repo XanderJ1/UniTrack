@@ -1,6 +1,7 @@
 package com.bash.Unitrack.Service;
 
 import com.bash.Unitrack.Data.DTO.SessionDTO;
+import com.bash.Unitrack.Data.DTO.SessionRequest;
 import com.bash.Unitrack.Data.Models.*;
 import com.bash.Unitrack.Exceptions.NotFoundException;
 import com.bash.Unitrack.Repositories.AttendanceRepository;
@@ -11,8 +12,6 @@ import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
@@ -20,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class SessionService {
@@ -41,8 +41,9 @@ public class SessionService {
     }
 
 
-    public ResponseEntity<List<Session>> fetchSession() {
-        return ResponseEntity.ok(sessionRepository.findAll());
+    public ResponseEntity<List<SessionDTO>> fetchSession() {
+        return ResponseEntity.ok(sessionRepository.findAll()
+                .stream().map(SessionDTO::new).collect(Collectors.toList()));
     }
 
     @Scheduled(fixedRate = 60000)
@@ -64,7 +65,7 @@ public class SessionService {
     public Boolean isInRange(Location studentLocation, Location lecturerLocation){
         return null;
     }
-    public ResponseEntity<String> createSession(SessionDTO sessionDTO) throws NotFoundException {
+    public ResponseEntity<String> createSession(SessionRequest sessionRequest) throws NotFoundException {
 
         Object object = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Jwt jwt = (Jwt) object;
@@ -74,7 +75,7 @@ public class SessionService {
         if (user.getRole().equals(Role.STUDENT)){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You should be a lecturer to create a session");
         }
-        Optional<Course> courseOptional = courseRepository.findByCourseName(sessionDTO.getCourse());
+        Optional<Course> courseOptional = courseRepository.findByCourseName(sessionRequest.courseName());
         if (courseOptional.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Course does not exist");
         }
@@ -95,7 +96,7 @@ public class SessionService {
 
         //Setup Session
         session.setAttendance(attendance);
-        session.setLocation(sessionDTO.getLocation());
+        session.setLocation(sessionRequest.location());
         session.setCourse(course);
         session.setLecturer(lecturer);
         session.setStartTime(Instant.now());

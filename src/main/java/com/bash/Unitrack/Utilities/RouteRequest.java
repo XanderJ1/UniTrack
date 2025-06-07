@@ -19,7 +19,7 @@ public class RouteRequest {
     public Mono<String > computeRoute(RequestClass request, String apikey){
         return webClient
                 .post()
-                .uri("https://routes.googleapis.com/directions/v2:computeRoutes")
+                .uri("/directions/v2:computeRoutes")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("X-Goog-Api-Key", apikey)
                 .header("X-Goog-FieldMask", "routes.duration,routes.distanceMeters")

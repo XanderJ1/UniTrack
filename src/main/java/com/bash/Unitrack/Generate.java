@@ -1,6 +1,6 @@
 package com.bash.Unitrack;
 
-import com.bash.Unitrack.Data.DTO.CourseDTO;
+import com.bash.Unitrack.Data.DTO.CourseRequest;
 import com.bash.Unitrack.Data.DTO.UserRequest;
 import com.bash.Unitrack.Data.Models.*;
 import com.bash.Unitrack.Exceptions.NotFoundException;
@@ -58,26 +58,26 @@ public class Generate {
             }
             List<UserRequest> users = objectMapper.readValue(lecturerFile, new TypeReference<List<UserRequest>>(){});
             for (UserRequest userRequest : users) {
-                if (!userRepository.existsByUsername(userRequest.getUsername())) {
+                if (!userRepository.existsByUsername(userRequest.username())) {
                     Lecturer user = new Lecturer();
-                    user.setUsername(userRequest.getUsername());
-                    user.setEmail(userRequest.getEmail());
-                    user.setFirstName(userRequest.getFirstName());
-                    user.setLastName(userRequest.getLastName());
+                    user.setUsername(userRequest.username());
+                    user.setEmail(userRequest.email());
+                    user.setFirstName(userRequest.firstName());
+                    user.setLastName(userRequest.lastName());
                     user.setRole(Role.LECTURER);
-                    user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+                    user.setPassword(passwordEncoder.encode(userRequest.password()));
                     userRepository.save(user);
                 }
             }
 
-            List<CourseDTO> courses = objectMapper.readValue(courseFile, new TypeReference<List<CourseDTO>>(){});
+            List<CourseRequest> courses = objectMapper.readValue(courseFile, new TypeReference<List<CourseRequest>>(){});
 
-            for (CourseDTO courseDTO: courses) {
-                if (!courseRepository.existsByCourseCode(courseDTO.getCourseCode())) {
+            for (CourseRequest courseRequest : courses) {
+                if (!courseRepository.existsByCourseCode(courseRequest.courseCode())) {
                     Course course = new Course();
-                    course.setCourseCode(courseDTO.getCourseCode());
-                    course.setCourseName(courseDTO.getCourseName());
-                    User user = userRepository.findById(courseDTO.getLecturerId()).orElseThrow(() -> new NotFoundException("User not found"));
+                    course.setCourseCode(courseRequest.courseCode());
+                    course.setCourseName(courseRequest.courseName());
+                    User user = userRepository.findById(courseRequest.lecturerId()).orElseThrow(() -> new NotFoundException("User not found"));
                     Lecturer lecturer = new Lecturer();
                     if (user instanceof Lecturer){
                         lecturer = (Lecturer) user;
@@ -88,15 +88,15 @@ public class Generate {
             }
             List<UserRequest> students = objectMapper.readValue(studentFile, new TypeReference<List<UserRequest>>(){});
             for (UserRequest userRequest : students) {
-                if (!userRepository.existsByUsername(userRequest.getUsername())) {
+                if (!userRepository.existsByUsername(userRequest.username())) {
                     Student student = new Student();
-                    student.setUsername(userRequest.getUsername());
-                    student.setEmail(userRequest.getEmail());
-                    student.setFirstName(userRequest.getFirstName());
-                    student.setLastName(userRequest.getLastName());
-                    student.setIndexNumber(userRequest.getIndexNumber());
+                    student.setUsername(userRequest.username());
+                    student.setEmail(userRequest.email());
+                    student.setFirstName(userRequest.firstName());
+                    student.setLastName(userRequest.lastName());
+                    student.setIndexNumber(userRequest.indexNumber());
                     student.setRole(Role.STUDENT);
-                    student.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+                    student.setPassword(passwordEncoder.encode(userRequest.password()));
                     userRepository.save(student);
                 }
             }

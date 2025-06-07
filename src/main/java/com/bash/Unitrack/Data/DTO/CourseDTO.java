@@ -1,37 +1,16 @@
 package com.bash.Unitrack.Data.DTO;
+import com.bash.Unitrack.Data.Models.Course;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import java.util.List;
+import java.util.stream.Collectors;
 
-@Getter
-@AllArgsConstructor
-public class CourseDTO {
-
-    private String courseName;
-    private String courseCode;
-    private Long lecturerId;
-
-    public String getCourseName() {
-        return courseName;
-    }
-
-    public String getCourseCode() {
-        return courseCode;
-    }
-
-    public Long getLecturerId() {
-        return lecturerId;
-    }
-
-    public void setCourseName(String courseName) {
-        this.courseName = courseName;
-    }
-
-    public void setCourseCode(String courseCode) {
-        this.courseCode = courseCode;
-    }
-
-    public void setLecturerId(Long lecturerId) {
-        this.lecturerId = lecturerId;
+public record CourseDTO(String courseName, String courseCode, List<LecturerDTO> lecturerId) {
+    public CourseDTO(Course course) {
+        this(
+                course.getCourseName(),
+                course.getCourseCode(),
+                course.getLecturer().stream().map(LecturerDTO::new)
+                        .collect(Collectors.toList())
+        );
     }
 }

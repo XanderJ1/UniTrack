@@ -40,28 +40,28 @@ public class UserService implements UserDetailsService {
     }
 
     public ResponseEntity<String> update(UserRequest userRequest) throws NotFoundException {
-        User user = userRepository.findByUsername(userRequest.getUsername())
+        User user = userRepository.findByUsername(userRequest.username())
                 .orElseThrow(() -> new NotFoundException(message));
 
-        if (userRequest.getFirstName() != null){
-            user.setFirstName(userRequest.getFirstName());
+        if (userRequest.firstName() != null){
+            user.setFirstName(userRequest.firstName());
         }
-        if (userRequest.getLastName() != null){
-            user.setLastName(userRequest.getLastName());
+        if (userRequest.lastName() != null){
+            user.setLastName(userRequest.lastName());
         }
-        if (userRequest.getEmail() != null){
-            user.setEmail(userRequest.getEmail());
+        if (userRequest.email() != null){
+            user.setEmail(userRequest.email());
         }
-        if (userRequest.getPassword() != null){
-            user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+        if (userRequest.password() != null){
+            user.setPassword(passwordEncoder.encode(userRequest.password()));
         }
 
         if (user instanceof Student student){
-            if (userRequest.getProgram() != null){
-                student.setProgram(userRequest.getProgram());
+            if (userRequest.program() != null){
+                student.setProgram(userRequest.program());
             }
-            if (userRequest.getIndexNumber() != null){
-                student.setIndexNumber(userRequest.getIndexNumber());
+            if (userRequest.indexNumber() != null){
+                student.setIndexNumber(userRequest.indexNumber());
             }
             userRepository.save(student);
             return ResponseEntity.ok("User details updated");

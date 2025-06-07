@@ -87,7 +87,7 @@ public class AttendanceService {
 
     public ResponseEntity<String> create(AttendanceRequestDTO attendanceRequestDTO, @RequestParam(required = false) Long id) throws NotFoundException, JsonProcessingException {
 
-        Session session = sessionRepository.findById(attendanceRequestDTO.getSessionId())
+        Session session = sessionRepository.findById(attendanceRequestDTO.sessionId())
                 .orElseThrow(() -> new NotFoundException("Session does not exist"));
 
         if (session.getStatus() == Stat.CLOSED){
@@ -97,14 +97,18 @@ public class AttendanceService {
         RequestClass requestClass = new RequestClass(
                 session.getLocation().getLatitude(),
                 session.getLocation().getLongitude(),
-                attendanceRequestDTO.getLocation().getLatitude(),
-                attendanceRequestDTO.getLocation().getLongitude()
+                attendanceRequestDTO.location().getLatitude(),
+                attendanceRequestDTO.location().getLongitude()
         );
+        double distance = range2(requestClass);
 
-        System.out.println("Haversine " + range2(requestClass));
+        System.out.println("Haversine " + distance);
+        if (range2(requestClass) >= 0.025){
+            double excess = Math.round((distance - 0.025) * 1000);
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).
+                    body("You're out of range \n" + excess + " metres from location");
+        }
 
-        String json = range(session.getLocation(), attendanceRequestDTO.getLocation()).getBody();
-        System.out.println(json);
         Student student = new Student();
 
         String username = authenticationService.getUsername();
@@ -130,7 +134,7 @@ public class AttendanceService {
         List<Student> students = new ArrayList<>();
         students.add(student);
         attendance.setStudent(students);
-        attendance.setLocation(attendanceRequestDTO.getLocation());
+        attendance.setLocation(attendanceRequestDTO.location());
         student.getAttendance().add(attendance);
         attendanceRepository.save(attendance);
         userRepository.save(student);
