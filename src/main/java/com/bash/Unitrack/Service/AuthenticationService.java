@@ -1,6 +1,6 @@
 package com.bash.Unitrack.Service;
 
-import com.bash.Unitrack.Data.DTO.SignInDTO;
+import com.bash.Unitrack.Data.DTO.SignInRequest;
 import com.bash.Unitrack.Data.DTO.UserRequest;
 import com.bash.Unitrack.Data.Models.Lecturer;
 import com.bash.Unitrack.Data.Models.Role;
@@ -53,33 +53,33 @@ public class AuthenticationService {
     }
 
     public ResponseEntity<String> register(UserRequest userRequest) throws BadCredentialsException {
-        if (userRequest.getUsername() == null || userRequest.getPassword() == null || userRequest.getRole() == null) {
+        if (userRequest.username() == null || userRequest.password() == null || userRequest.role() == null) {
             throw new BadCredentialsException("Enter credentials");
         }
-        if (userRepository.findByUsername(userRequest.getUsername()).isPresent()) {
+        if (userRepository.findByUsername(userRequest.username()).isPresent()) {
             throw new BadCredentialsException("User already exists");
         }
         else {
 
             User newUser = new User();
-            if (userRequest.getRole().equals("LECTURER")){
+            if (userRequest.role().equals("LECTURER")){
                 newUser = new Lecturer();
                 BeanUtils.copyProperties(userRequest, newUser);
-                newUser.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+                newUser.setPassword(passwordEncoder.encode(userRequest.password()));
                 newUser.setRole(Role.LECTURER);
             }
 
-            if (userRequest.getRole().equals("STUDENT")){
+            if (userRequest.role().equals("STUDENT")){
                 newUser = new Student();
                 BeanUtils.copyProperties(userRequest, newUser);
-                newUser.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+                newUser.setPassword(passwordEncoder.encode(userRequest.password()));
                 newUser.setRole(Role.STUDENT);
             }
 
-            if (userRequest.getRole().equals("ADMIN")){
+            if (userRequest.role().equals("ADMIN")){
                 newUser = new User();
                 BeanUtils.copyProperties(userRequest, newUser);
-                newUser.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+                newUser.setPassword(passwordEncoder.encode(userRequest.password()));
                 newUser.setRole(Role.ADMIN);
             }
 
@@ -90,18 +90,18 @@ public class AuthenticationService {
 
     }
 
-    public ResponseEntity<SignInDTO> signIn(UserRequest userRequest) throws BadCredentialsException {
+    public ResponseEntity<SignInRequest> signIn(UserRequest userRequest) throws BadCredentialsException {
 
-        if (userRequest.getUsername() == null || userRequest.getPassword() == null) {
+        if (userRequest.username() == null || userRequest.password() == null) {
             throw new BadCredentialsException("Enter username and password");
         }
 
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken
-                        (userRequest.getUsername(), userRequest.getPassword()));
+                        (userRequest.username(), userRequest.password()));
         User user = (User) authentication.getPrincipal();
         String role = user.getRole().toString();
         String jwt = tokenService.generate(user);
-        return ResponseEntity.ok(new SignInDTO(jwt, role));
+        return ResponseEntity.ok(new SignInRequest(jwt, role));
     }
 }

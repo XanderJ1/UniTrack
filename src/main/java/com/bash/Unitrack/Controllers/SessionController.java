@@ -1,6 +1,7 @@
 package com.bash.Unitrack.Controllers;
 
 import com.bash.Unitrack.Data.DTO.SessionDTO;
+import com.bash.Unitrack.Data.DTO.SessionRequest;
 import com.bash.Unitrack.Data.Models.Session;
 import com.bash.Unitrack.Exceptions.NotFoundException;
 import com.bash.Unitrack.Service.SessionService;
@@ -20,12 +21,12 @@ public class SessionController {
     }
 
     @GetMapping("")
-    public ResponseEntity<List<Session>> fetchService(){
+    public ResponseEntity<List<SessionDTO>> fetchService(){
         return sessionService.fetchSession();
     }
 
     @PostMapping("/create")
-    public ResponseEntity<String > create(@RequestBody SessionDTO sessionDTO) throws NotFoundException {
-        return sessionService.createSession(sessionDTO);
+    public ResponseEntity<String > create(@RequestBody SessionRequest sessionRequest) throws NotFoundException {
+        return sessionService.createSession(sessionRequest);
     }
 }

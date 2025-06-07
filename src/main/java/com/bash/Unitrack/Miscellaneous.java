@@ -21,6 +21,8 @@ public class Miscellaneous {
 
     @Bean
     public WebClient webClient(WebClient.Builder builder){
-        return builder.build();
+        return builder.
+                baseUrl("https://routes.googleapis.com")
+                .build();
     }
 }
