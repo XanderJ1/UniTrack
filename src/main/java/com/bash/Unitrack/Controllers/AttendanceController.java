@@ -32,10 +32,10 @@ public class AttendanceController {
 
     @PostMapping("/mark")
     public ResponseEntity<String > createAttendance(
-            @RequestBody AttendanceRequestDTO attendance,
+            @RequestBody AttendanceRequestDTO attendance, @RequestHeader("X-Device_ID") String deviceID,
             @RequestParam(required = false) Long id)
             throws NotFoundException, JsonProcessingException {
-        return attendanceService.create(attendance, id);
+        return attendanceService.create(attendance, deviceID, id);
     }
 
     @GetMapping("/student")
