@@ -138,9 +138,9 @@ public class AttendanceService {
                     && device.getTime().isAfter(Instant.now()
                     .minusSeconds(60))){
                 System.out.println("User has already marked attendance");
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .body("Device has already been used \n" + "Wait 1 minute to try again");
             }
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body("Device has already been used \n" + "Wait 1 minute to try again");
         }
 
         double distance = range2(requestClass);
