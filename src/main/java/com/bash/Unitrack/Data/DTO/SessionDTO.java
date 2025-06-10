@@ -5,12 +5,13 @@ import com.bash.Unitrack.Data.Models.Session;
 import com.bash.Unitrack.Data.Models.Stat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.time.Instant;
+import java.time.*;
+import java.time.temporal.ChronoUnit;
 
 public record SessionDTO(
         Long id,
-        Instant startTime,
-        Instant endTime,
+        LocalTime startTime,
+        LocalTime endTime,
         Stat status,
         CourseRequest course,
         @JsonProperty("lecturer")
@@ -21,13 +22,24 @@ public record SessionDTO(
     public SessionDTO(Session session) {
         this(
                 session.getId(),
-                session.getStartTime(),
-                session.getEndTime(),
+                time(session.getStartTime()),
+                time(session.getEndTime()),
                 session.getStatus(),
                 new CourseRequest(session.getCourse().getCourseName(), session.getCourse().getCourseCode(),session.getLecturer().getId()),
                 new LecturerDTO(session.getLecturer()),
                 session.getLocation(),
                 new AttendanceDT0(session.getAttendance())
         );
+    }
+
+    public static LocalTime time(Instant now){
+        return now.atZone(ZoneId.systemDefault())
+                .toLocalTime()
+                .truncatedTo(ChronoUnit.MINUTES);
+    }
+
+    public LocalDate date(Instant now){
+        return now.atZone(ZoneId.systemDefault())
+                .toLocalDate();
     }
 }

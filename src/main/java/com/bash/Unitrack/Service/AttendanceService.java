@@ -5,6 +5,7 @@ import com.bash.Unitrack.Data.DTO.AttendanceRequestDTO;
 import com.bash.Unitrack.Data.Models.*;
 import com.bash.Unitrack.Exceptions.NotFoundException;
 import com.bash.Unitrack.Repositories.AttendanceRepository;
+import com.bash.Unitrack.Repositories.DeviceIDRepository;
 import com.bash.Unitrack.Repositories.SessionRepository;
 import com.bash.Unitrack.Repositories.UserRepository;
 import com.bash.Unitrack.Utilities.Haversine;
@@ -15,12 +16,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,6 +32,7 @@ public class AttendanceService {
     public final UserRepository userRepository;
     public final SessionRepository sessionRepository;
     public final AuthenticationService authenticationService;
+    private final DeviceIDRepository deviceIDRepository;
     private final WebClient webclient;
 
 
@@ -41,12 +44,13 @@ public class AttendanceService {
             UserRepository userRepository,
             SessionRepository sessionRepository,
             WebClient webclient,
-            AuthenticationService authenticationService){
+            AuthenticationService authenticationService, DeviceIDRepository deviceIDRepository){
         this.attendanceRepository = attendanceRepository;
         this.userRepository = userRepository;
         this.sessionRepository = sessionRepository;
         this.authenticationService = authenticationService;
         this.webclient = webclient;
+        this.deviceIDRepository = deviceIDRepository;
     }
 
     public ResponseEntity<List<AttendanceDT0>> fetchAttendance() {
@@ -85,7 +89,11 @@ public class AttendanceService {
         return Haversine.calculateDistance(request);
     }
 
-    public ResponseEntity<String> create(AttendanceRequestDTO attendanceRequestDTO, @RequestParam(required = false) Long id) throws NotFoundException, JsonProcessingException {
+    public ResponseEntity<String> create(
+            AttendanceRequestDTO attendanceRequestDTO,
+            @RequestHeader("X-Device-ID") String deviceID ,
+            @RequestParam(required = false) Long id) throws NotFoundException,
+            JsonProcessingException {
 
         Session session = sessionRepository.findById(attendanceRequestDTO.sessionId())
                 .orElseThrow(() -> new NotFoundException("Session does not exist"));
@@ -100,14 +108,6 @@ public class AttendanceService {
                 attendanceRequestDTO.location().getLatitude(),
                 attendanceRequestDTO.location().getLongitude()
         );
-        double distance = range2(requestClass);
-
-        System.out.println("Haversine " + distance);
-        if (range2(requestClass) >= 0.025){
-            double excess = Math.round((distance - 0.025) * 1000);
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).
-                    body("You're out of range \n" + excess + " metres from location");
-        }
 
         Student student = new Student();
 
@@ -125,6 +125,31 @@ public class AttendanceService {
 
         if (currentUser instanceof Student){
             student = (Student) currentUser;
+        }
+
+        if (deviceIDRepository.findDeviceByDeviceID(deviceID).isEmpty()){
+            System.out.println(deviceID);
+            deviceIDRepository.save(new Device(Instant.now(), deviceID));
+        }else {
+            // Check If device has already taken attendance 1 minute ago
+            Device device = deviceIDRepository.findDeviceByDeviceID(deviceID)
+                    .orElseThrow(() -> new NotFoundException("Device Not found"));
+            if (currentUser instanceof Student && device.getDeviceID().equals(deviceID)
+                    && device.getTime().isAfter(Instant.now()
+                    .minusSeconds(60))){
+                System.out.println("User has already marked attendance");
+            }
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body("Device has already been used \n" + "Wait 1 minute to try again");
+        }
+
+        double distance = range2(requestClass);
+
+        System.out.println("Haversine " + distance);
+        if (range2(requestClass) >= 0.025){
+            double excess = Math.round((distance - 0.025) * 1000);
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).
+                    body("You're out of range \n" + excess + " metres from location");
         }
 
         Attendance attendance = session.getAttendance();
