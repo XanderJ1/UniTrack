@@ -44,7 +44,7 @@ public class Generate {
         };
     }
 
-    @Profile("local")
+/*    @Profile("local")
     @Bean
     public CommandLineRunner userDetailLoader() throws NotFoundException {
 
@@ -101,7 +101,7 @@ public class Generate {
                 }
             }
         };
-    }
+    }*/
 }
 
 

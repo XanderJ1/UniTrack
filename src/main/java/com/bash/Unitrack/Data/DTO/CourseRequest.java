@@ -1,3 +1,5 @@
 package com.bash.Unitrack.Data.DTO;
 
-public record CourseRequest(String courseName, String courseCode, Long lecturerId) {}
+import jakarta.validation.Valid;
+
+public record CourseRequest(@Valid String courseName, String courseCode, Long lecturerId) {}

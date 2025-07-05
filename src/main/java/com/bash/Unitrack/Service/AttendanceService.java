@@ -23,6 +23,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -127,13 +128,13 @@ public class AttendanceService {
             student = (Student) currentUser;
         }
 
-        if (deviceIDRepository.findDeviceByDeviceID(deviceID).isEmpty()){
+        Optional<Device> deviceOptional = deviceIDRepository.findDeviceByDeviceID(deviceID);
+        if (deviceOptional.isEmpty()){
             System.out.println(deviceID);
             deviceIDRepository.save(new Device(Instant.now(), deviceID));
         }else {
             // Check If device has already taken attendance 1 minute ago
-            Device device = deviceIDRepository.findDeviceByDeviceID(deviceID)
-                    .orElseThrow(() -> new NotFoundException("Device Not found"));
+            Device device = deviceOptional.get();
             if (currentUser instanceof Student && device.getDeviceID().equals(deviceID)
                     && device.getTime().isAfter(Instant.now()
                     .minusSeconds(60))){
@@ -146,7 +147,7 @@ public class AttendanceService {
         double distance = range2(requestClass);
 
         System.out.println("Haversine " + distance);
-        if (range2(requestClass) >= 0.025){
+        if (distance >= 0.025){
             double excess = Math.round((distance - 0.025) * 1000);
             return ResponseEntity.status(HttpStatus.FORBIDDEN).
                     body("You're out of range \n" + excess + " metres from location");
