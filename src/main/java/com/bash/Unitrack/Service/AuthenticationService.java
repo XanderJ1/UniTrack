@@ -8,6 +8,7 @@ import com.bash.Unitrack.Data.Models.Student;
 import com.bash.Unitrack.Data.Models.User;
 import com.bash.Unitrack.Exceptions.BadCredentialsException;
 import com.bash.Unitrack.Repositories.UserRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,7 +53,7 @@ public class AuthenticationService {
         return jwt.getClaim("user_id");
     }
 
-    public ResponseEntity<String> register(UserRequest userRequest) throws BadCredentialsException {
+    public ResponseEntity<String> register(@Valid UserRequest userRequest) throws BadCredentialsException {
         if (userRequest.username() == null || userRequest.password() == null || userRequest.role() == null) {
             throw new BadCredentialsException("Enter credentials");
         }
@@ -90,7 +91,7 @@ public class AuthenticationService {
 
     }
 
-    public ResponseEntity<SignInRequest> signIn(UserRequest userRequest) throws BadCredentialsException {
+    public ResponseEntity<SignInRequest> signIn(@Valid UserRequest userRequest) throws BadCredentialsException {
 
         if (userRequest.username() == null || userRequest.password() == null) {
             throw new BadCredentialsException("Enter username and password");
