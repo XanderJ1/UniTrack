@@ -167,12 +167,12 @@ public class AttendanceService {
         return ResponseEntity.status(HttpStatus.CREATED).body("Attendance Marked");
     }
 
-    public ResponseEntity<List<Attendance>> studentAttendance(Long id) throws NotFoundException {
+    public ResponseEntity<List<AttendanceDT0>> studentAttendance(Long id) throws NotFoundException {
 
         User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("User not found"));
         Student student = (Student) user;
         List<Attendance> attendanceList =  student.getAttendance();
-        return ResponseEntity.status(HttpStatus.OK).body(attendanceList);
+        return ResponseEntity.status(HttpStatus.OK).body(attendanceList.stream().map(AttendanceDT0::new).collect(Collectors.toList()));
     }
 
     public ResponseEntity<List<Attendance>> attendanceLecturer(Long id) throws NotFoundException {

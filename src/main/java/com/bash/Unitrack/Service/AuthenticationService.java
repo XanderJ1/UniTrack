@@ -1,5 +1,6 @@
 package com.bash.Unitrack.Service;
 
+import com.bash.Unitrack.Data.DTO.SignIn;
 import com.bash.Unitrack.Data.DTO.SignInRequest;
 import com.bash.Unitrack.Data.DTO.UserRequest;
 import com.bash.Unitrack.Data.Models.Lecturer;
@@ -91,7 +92,7 @@ public class AuthenticationService {
 
     }
 
-    public ResponseEntity<SignInRequest> signIn(@Valid UserRequest userRequest) throws BadCredentialsException {
+    public ResponseEntity<SignInRequest> signIn(@Valid SignIn userRequest) throws BadCredentialsException {
 
         if (userRequest.username() == null || userRequest.password() == null) {
             throw new BadCredentialsException("Enter username and password");

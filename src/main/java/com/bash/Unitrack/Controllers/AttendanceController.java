@@ -39,7 +39,7 @@ public class AttendanceController {
     }
 
     @GetMapping("/student")
-    public ResponseEntity<List<Attendance>> studentAttendance() throws NotFoundException {
+    public ResponseEntity<List<AttendanceDT0>> studentAttendance() throws NotFoundException {
         return attendanceService.studentAttendance(authenticationService.getId());
     }
 

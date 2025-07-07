@@ -1,5 +1,6 @@
 package com.bash.Unitrack.Controllers;
 
+import com.bash.Unitrack.Data.DTO.SignIn;
 import com.bash.Unitrack.Data.DTO.SignInRequest;
 import com.bash.Unitrack.Data.DTO.UserRequest;
 import com.bash.Unitrack.Exceptions.BadCredentialsException;
@@ -24,7 +25,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/signIn")
-    public ResponseEntity<SignInRequest> signIn(@Valid @RequestBody UserRequest userRequest) throws BadCredentialsException {
+    public ResponseEntity<SignInRequest> signIn(@Valid @RequestBody SignIn userRequest) throws BadCredentialsException {
 
         return authenticationService.signIn(userRequest);
     }
