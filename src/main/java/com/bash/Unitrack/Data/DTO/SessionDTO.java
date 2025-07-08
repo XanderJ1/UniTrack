@@ -10,8 +10,8 @@ import java.time.temporal.ChronoUnit;
 
 public record SessionDTO(
         Long id,
-        LocalTime startTime,
-        LocalTime endTime,
+        String startTime,
+        String endTime,
         Stat status,
         CourseRequest course,
         @JsonProperty("lecturer")
@@ -32,14 +32,14 @@ public record SessionDTO(
         );
     }
 
-    public static LocalTime time(Instant now){
+    public static String  time(Instant now){
         return now.atZone(ZoneId.systemDefault())
                 .toLocalTime()
-                .truncatedTo(ChronoUnit.MINUTES);
+                .truncatedTo(ChronoUnit.MINUTES).toString();
     }
 
-    public LocalDate date(Instant now){
+    public String date(Instant now){
         return now.atZone(ZoneId.systemDefault())
-                .toLocalDate();
+                .toLocalDate().toString();
     }
 }
