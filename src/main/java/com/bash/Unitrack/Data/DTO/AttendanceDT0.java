@@ -13,19 +13,13 @@ public class AttendanceDT0 {
     private String courseName;
     private List<StudentDTO> studentList;
     private String lecturer;
-    private final String date;
-    private final String  time;
-
+    private final LocalDateTime date;
     public AttendanceDT0(Attendance attendance) {
 
         courseName = attendance.getCourse().getCourseName();
         lecturer = attendance.getLecturer().getFirstName() + " " + attendance.getLecturer().getLastName();
         studentList = attendance.getStudents().stream().map(StudentDTO::new).collect(Collectors.toList());
-        LocalDateTime dateTime = Instant.now().atZone(ZoneId.systemDefault()).toLocalDateTime();
-        time = dateTime.getHour() + ":" + dateTime.getMinute();
-        date = dateTime.getDayOfWeek() + ", " +
-                dateTime.getDayOfMonth() + " " + dateTime.getMonth() + ", " + dateTime.getYear();
-
+        date = Instant.now().atZone(ZoneId.systemDefault()).toLocalDateTime();
     }
 
     public String getCourseName() {
@@ -52,11 +46,8 @@ public class AttendanceDT0 {
         this.lecturer = lecturer;
     }
 
-    public String getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public String getTime() {
-        return time;
-    }
 }
