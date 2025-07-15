@@ -1,5 +1,6 @@
 package com.bash.Unitrack.Data.DTO;
 
+import com.bash.Unitrack.Data.Models.Department;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
@@ -10,12 +11,14 @@ public record UserRequest(
         String firstName,
         @NotBlank
         String lastName,
-        String program,
-        String indexNumber,
         @NotBlank
         String password,
         @Email
         String email,
         @NotBlank
-        String role
+        String role,
+        @NotBlank
+        String department,
+        String program,
+        String indexNumber
 ) {}

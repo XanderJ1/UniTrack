@@ -181,4 +181,11 @@ public class AttendanceService {
         List<Attendance> attendanceList = lecturer.getAttendance();
         return ResponseEntity.ok(attendanceList);
     }
+
+    public ResponseEntity<AttendanceDT0> getAttendance(Long id) throws NotFoundException {
+        Attendance attendance = attendanceRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Attendance does not exist"));
+        AttendanceDT0 attendanceDT0 = new AttendanceDT0(attendance);
+        return ResponseEntity.ok(attendanceDT0);
+    }
 }

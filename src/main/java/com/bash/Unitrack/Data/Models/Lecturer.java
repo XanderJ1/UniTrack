@@ -3,10 +3,7 @@ package com.bash.Unitrack.Data.Models;
 import ch.qos.logback.core.sift.Discriminator;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.List;
@@ -18,7 +15,6 @@ public class Lecturer extends User {
 
     private String lecturerId;
     private String name;
-    private String department;
     @ManyToMany
     private List<Course> courses;
     @OneToMany
@@ -31,9 +27,8 @@ public class Lecturer extends User {
 
     }
 
-    public Lecturer(String name, String department){
+    public Lecturer(String name){
         this.name = name;
-        this.department = department;
     }
 
 }

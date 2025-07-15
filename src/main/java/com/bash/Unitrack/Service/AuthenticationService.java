@@ -3,11 +3,9 @@ package com.bash.Unitrack.Service;
 import com.bash.Unitrack.Data.DTO.SignIn;
 import com.bash.Unitrack.Data.DTO.SignInRequest;
 import com.bash.Unitrack.Data.DTO.UserRequest;
-import com.bash.Unitrack.Data.Models.Lecturer;
-import com.bash.Unitrack.Data.Models.Role;
-import com.bash.Unitrack.Data.Models.Student;
-import com.bash.Unitrack.Data.Models.User;
+import com.bash.Unitrack.Data.Models.*;
 import com.bash.Unitrack.Exceptions.BadCredentialsException;
+import com.bash.Unitrack.Repositories.DepartmentRepository;
 import com.bash.Unitrack.Repositories.UserRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
@@ -31,15 +29,17 @@ public class AuthenticationService {
     private final TokenService tokenService;
 
     private final AuthenticationManager authenticationManager;
+    private final DepartmentRepository departmentRepository;
 
     public AuthenticationService(UserRepository userRepository,
                                  PasswordEncoder passwordEncoder,
                                  AuthenticationManager authenticationManager,
-                                 TokenService tokenService){
+                                 TokenService tokenService, DepartmentRepository departmentRepository){
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.tokenService = tokenService;
+        this.departmentRepository = departmentRepository;
     }
 
     public String getUsername(){
@@ -62,19 +62,22 @@ public class AuthenticationService {
             throw new BadCredentialsException("User already exists");
         }
         else {
-
             User newUser = new User();
             if (userRequest.role().equals("LECTURER")){
                 newUser = new Lecturer();
+                Department department = departmentRepository.findByDepartmentName(userRequest.department());
                 BeanUtils.copyProperties(userRequest, newUser);
+                newUser.setDepartment(department);
                 newUser.setPassword(passwordEncoder.encode(userRequest.password()));
                 newUser.setRole(Role.LECTURER);
             }
 
             if (userRequest.role().equals("STUDENT")){
                 newUser = new Student();
+                Department department = departmentRepository.findByDepartmentName(userRequest.department());
                 BeanUtils.copyProperties(userRequest, newUser);
                 newUser.setPassword(passwordEncoder.encode(userRequest.password()));
+                newUser.setDepartment(department);
                 newUser.setRole(Role.STUDENT);
             }
 

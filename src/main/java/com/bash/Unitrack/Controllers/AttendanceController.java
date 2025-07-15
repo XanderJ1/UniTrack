@@ -38,6 +38,11 @@ public class AttendanceController {
         return attendanceService.create(attendance, deviceID, id);
     }
 
+    @GetMapping("/one")
+    public ResponseEntity<AttendanceDT0> getAttendance(@RequestParam(required = false) Long id) throws NotFoundException {
+        return attendanceService.getAttendance(id);
+    }
+
     @GetMapping("/student")
     public ResponseEntity<List<AttendanceDT0>> studentAttendance() throws NotFoundException {
         return attendanceService.studentAttendance(authenticationService.getId());

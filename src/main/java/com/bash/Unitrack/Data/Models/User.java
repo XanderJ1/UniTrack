@@ -26,6 +26,8 @@ public class User implements UserDetails {
     private String lastName;
     private String username;
     private String password;
+    @ManyToOne
+    private Department department;
     private String email;
     @Embedded
     private Location location;

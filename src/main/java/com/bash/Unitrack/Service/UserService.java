@@ -2,6 +2,7 @@ package com.bash.Unitrack.Service;
 
 import com.bash.Unitrack.Data.DTO.UserDTO;
 import com.bash.Unitrack.Data.DTO.UserRequest;
+import com.bash.Unitrack.Data.Models.Lecturer;
 import com.bash.Unitrack.Data.Models.Student;
 import com.bash.Unitrack.Data.Models.User;
 import com.bash.Unitrack.Exceptions.NotFoundException;
@@ -82,7 +83,14 @@ public class UserService implements UserDetailsService {
     public UserDTO fetchUser(Long id) throws NotFoundException {
         User user = userRepository.findById(id).
                 orElseThrow(() -> new NotFoundException(message));
+        if (user instanceof Lecturer){
+            Lecturer lecturer = (Lecturer) user;
+        }
+        else{
+            Student lecturer = (Student) user;
+        }
         return new UserDTO(user);
+
     }
 }
 

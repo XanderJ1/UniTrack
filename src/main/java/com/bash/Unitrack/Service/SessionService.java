@@ -46,10 +46,15 @@ public class SessionService {
                 .stream().map(SessionDTO::new).collect(Collectors.toList()));
     }
 
+    public ResponseEntity<List<SessionDTO>> fetchSessions() {
+
+        return ResponseEntity.ok(sessionRepository.findAll()
+                .stream().map(SessionDTO::new).collect(Collectors.toList()));
+    }
+
     @Scheduled(fixedRate = 60000)
     @Transactional
     public void closeExpiredSession(){
-
         List<Session> activeSession = sessionRepository.findByStatus(Stat.ACTIVE);
         if (activeSession.isEmpty()){
             return;

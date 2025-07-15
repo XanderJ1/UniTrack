@@ -31,15 +31,4 @@ public record SessionDTO(
                 new AttendanceDT0(session.getAttendance())
         );
     }
-
-/*    public static String  time(Instant now){
-        return now.atZone(ZoneId.systemDefault())
-                .toLocalTime()
-                .truncatedTo(ChronoUnit.MINUTES).toString();
-    }
-
-    public String date(Instant now){
-        return now.atZone(ZoneId.systemDefault())
-                .toLocalDate().toString();
-    }*/
 }

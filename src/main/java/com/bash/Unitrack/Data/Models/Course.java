@@ -18,6 +18,8 @@ public class Course {
     private String courseName;
     @Column(unique = true)
     private String courseCode;
+    @ManyToMany
+    private List<Department> department;
     @OneToMany
     private List<Attendance> attendance;
     @OneToOne

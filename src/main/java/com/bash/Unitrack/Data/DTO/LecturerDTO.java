@@ -17,7 +17,7 @@ public record LecturerDTO(
                 lecturer.getLastName(),
                 lecturer.getEmail(),
                 lecturer.getRole().name(),
-                lecturer.getDepartment()
+                lecturer.getDepartment().toString()
         );
     }
 }

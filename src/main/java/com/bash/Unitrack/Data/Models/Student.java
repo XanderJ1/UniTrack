@@ -15,7 +15,6 @@ public class Student extends User{
 
     private String indexNumber;
     private String program;
-
     @ManyToMany
     @JoinTable(
             name = "student_attendance",
