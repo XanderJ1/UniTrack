@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
@@ -34,12 +35,28 @@ public class Generate {
         this.courseRepository = courseRepository;
         this.objectMapper = objectMapper;
     }
+
+    public void verifyBeforeSave(Department department){
+        if (departmentRepository.findByDepartmentName(department.getDepartmentName()).isEmpty()){
+            departmentRepository.save(department);
+        }
+    }
     @Bean
-    public CommandLineRunner commandLineRunner(){
+    public CommandLineRunner commandLineRunner() throws NotFoundException {
+
+        Department dept1 = new Department("Art");
+        Department dept2 = new Department("Science");
+        Department dept3 = new Department("Economics");
+        Department dept4 = new Department("Law");
+        List<Department> departments = new ArrayList<>(List.of(dept1, dept2,dept3, dept4));
+
+        for(Department department: departments){
+            verifyBeforeSave(department);
+        }
 
         User user1 = new User("bash", passwordEncoder.encode("admin"), Role.ADMIN,"bash@gmail");
-        Department department = new Department("Science");
-        departmentRepository.save(department);
+        Department department = departmentRepository.findByDepartmentName("Science")
+                .orElseThrow(() -> new NotFoundException("Department does not exist"));
         System.out.println(user1.getPassword());
         return args -> {
             if (userRepository.findByUsername("bash").isEmpty()){
@@ -64,7 +81,7 @@ public class Generate {
             List<UserRequest> users = objectMapper.readValue(lecturerFile, new TypeReference<List<UserRequest>>(){});
             for (UserRequest userRequest : users) {
                 if (!userRepository.existsByUsername(userRequest.username())) {
-                    Department department = departmentRepository.findByDepartmentName("Science");
+                    Department department = departmentRepository.findByDepartmentName("Science").orElseThrow(() -> new NotFoundException("Course does not exist"));
                     Lecturer user = new Lecturer();
                     user.setUsername(userRequest.username());
                     user.setEmail(userRequest.email());
@@ -85,9 +102,7 @@ public class Generate {
                     course.setCourseCode(courseRequest.courseCode());
                     course.setCourseName(courseRequest.courseName());
                     User user = userRepository.findById(courseRequest.lecturerId()).orElseThrow(() -> new NotFoundException("User not found"));
-                    Lecturer lecturer = new Lecturer();
-                    if (user instanceof Lecturer){
-                        lecturer = (Lecturer) user;
+                    if (user instanceof Lecturer lecturer){
                         course.setLecturer(lecturer);
                     }
                     courseRepository.save(course);
@@ -96,7 +111,8 @@ public class Generate {
             List<UserRequest> students = objectMapper.readValue(studentFile, new TypeReference<List<UserRequest>>(){});
             for (UserRequest userRequest : students) {
                 if (!userRepository.existsByUsername(userRequest.username())) {
-                    Department department = departmentRepository.findByDepartmentName("Science");
+                    Department department = departmentRepository.findByDepartmentName("Science")
+                            .orElseThrow(() -> new NotFoundException("Course does not exist"));
                     Student student = new Student();
                     student.setUsername(userRequest.username());
                     student.setEmail(userRequest.email());

@@ -5,6 +5,7 @@ import com.bash.Unitrack.Data.DTO.SignInRequest;
 import com.bash.Unitrack.Data.DTO.UserRequest;
 import com.bash.Unitrack.Data.Models.*;
 import com.bash.Unitrack.Exceptions.BadCredentialsException;
+import com.bash.Unitrack.Exceptions.NotFoundException;
 import com.bash.Unitrack.Repositories.DepartmentRepository;
 import com.bash.Unitrack.Repositories.UserRepository;
 import jakarta.validation.Valid;
@@ -54,7 +55,7 @@ public class AuthenticationService {
         return jwt.getClaim("user_id");
     }
 
-    public ResponseEntity<String> register(@Valid UserRequest userRequest) throws BadCredentialsException {
+    public ResponseEntity<String> register(@Valid UserRequest userRequest) throws BadCredentialsException, NotFoundException {
         if (userRequest.username() == null || userRequest.password() == null || userRequest.role() == null) {
             throw new BadCredentialsException("Enter credentials");
         }
@@ -65,7 +66,8 @@ public class AuthenticationService {
             User newUser = new User();
             if (userRequest.role().equals("LECTURER")){
                 newUser = new Lecturer();
-                Department department = departmentRepository.findByDepartmentName(userRequest.department());
+                Department department = departmentRepository.findByDepartmentName(userRequest.department())
+                        .orElseThrow(() -> new NotFoundException("Course does not exist"));
                 BeanUtils.copyProperties(userRequest, newUser);
                 newUser.setDepartment(department);
                 newUser.setPassword(passwordEncoder.encode(userRequest.password()));
@@ -74,7 +76,8 @@ public class AuthenticationService {
 
             if (userRequest.role().equals("STUDENT")){
                 newUser = new Student();
-                Department department = departmentRepository.findByDepartmentName(userRequest.department());
+                Department department = departmentRepository.findByDepartmentName(userRequest.department())
+                        .orElseThrow(() -> new NotFoundException("Course does not exist"));
                 BeanUtils.copyProperties(userRequest, newUser);
                 newUser.setPassword(passwordEncoder.encode(userRequest.password()));
                 newUser.setDepartment(department);

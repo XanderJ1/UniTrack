@@ -4,6 +4,7 @@ import com.bash.Unitrack.Data.DTO.SignIn;
 import com.bash.Unitrack.Data.DTO.SignInRequest;
 import com.bash.Unitrack.Data.DTO.UserRequest;
 import com.bash.Unitrack.Exceptions.BadCredentialsException;
+import com.bash.Unitrack.Exceptions.NotFoundException;
 import com.bash.Unitrack.Service.AuthenticationService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@Valid @RequestBody UserRequest userRequest) throws BadCredentialsException {
+    public ResponseEntity<String> register(@Valid @RequestBody UserRequest userRequest) throws BadCredentialsException, NotFoundException {
         return authenticationService.register(userRequest);
     }
 

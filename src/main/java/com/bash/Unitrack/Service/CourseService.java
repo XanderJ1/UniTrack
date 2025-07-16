@@ -5,6 +5,7 @@ import com.bash.Unitrack.Data.DTO.CourseRequest;
 import com.bash.Unitrack.Data.Models.*;
 import com.bash.Unitrack.Exceptions.NotFoundException;
 import com.bash.Unitrack.Repositories.CourseRepository;
+import com.bash.Unitrack.Repositories.DepartmentRepository;
 import com.bash.Unitrack.Repositories.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,10 +19,12 @@ public class CourseService {
 
     private final CourseRepository courseRepository;
     private final UserRepository userRepository;
+    private final DepartmentRepository departmentRepository;
 
-    public CourseService(CourseRepository courseRepository, UserRepository userRepository){
+    public CourseService(CourseRepository courseRepository, UserRepository userRepository, DepartmentRepository departmentRepository){
         this.courseRepository = courseRepository;
         this.userRepository = userRepository;
+        this.departmentRepository = departmentRepository;
     }
 
     public ResponseEntity<List<CourseDTO>> fetchAll() {
@@ -38,7 +41,9 @@ public class CourseService {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Only lecturers can be assigned courses");
         }
         Lecturer lecturer = (Lecturer) user;
-        Course newCourse = new Course(courseRequest.courseName(), courseRequest.courseCode(), lecturer);
+        Department department = departmentRepository.findByDepartmentName(courseRequest.department())
+                .orElseThrow(() -> new NotFoundException("Department does not exist"));
+        Course newCourse = new Course(courseRequest.courseName(), courseRequest.courseCode(), lecturer, department);
         courseRepository.save(newCourse);
         return ResponseEntity.status(HttpStatus.CREATED).body("Successfully created");
     }

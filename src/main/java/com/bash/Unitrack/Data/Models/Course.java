@@ -19,7 +19,7 @@ public class Course {
     @Column(unique = true)
     private String courseCode;
     @ManyToMany
-    private List<Department> department;
+    private List<Department> department = new ArrayList<>();
     @OneToMany
     private List<Attendance> attendance;
     @OneToOne
@@ -33,10 +33,11 @@ public class Course {
 
     }
 
-    public Course(String courseName, String courseId, Lecturer lecturer){
+    public Course(String courseName, String courseId, Lecturer lecturer, Department department){
         this.courseName = courseName;
         this.courseCode = courseId;
         this.lecturer.add(lecturer);
+        this.department.add(department);
     }
 
     public String getCourseName() {

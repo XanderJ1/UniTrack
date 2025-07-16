@@ -6,6 +6,7 @@
     import com.bash.Unitrack.Exceptions.NotFoundException;
     import com.bash.Unitrack.Service.AuthenticationService;
     import com.bash.Unitrack.Service.CourseService;
+    import jakarta.validation.Valid;
     import org.springframework.http.ResponseEntity;
     import org.springframework.web.bind.annotation.*;
     
@@ -34,7 +35,7 @@
         }
     
         @PostMapping("/add")
-        public ResponseEntity<String > bash(@RequestBody CourseRequest courseRequest) throws NotFoundException {
+        public ResponseEntity<String > bash(@Valid @RequestBody CourseRequest courseRequest) throws NotFoundException {
             return courseService.addCourse(courseRequest);
         }
     

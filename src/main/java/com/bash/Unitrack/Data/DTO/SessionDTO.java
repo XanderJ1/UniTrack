@@ -25,7 +25,7 @@ public record SessionDTO(
                 session.getStartTime().atZone(ZoneId.systemDefault()).toLocalDateTime(),
                 session.getEndTime().atZone(ZoneId.systemDefault()).toLocalDateTime(),
                 session.getStatus(),
-                new CourseRequest(session.getCourse().getCourseName(), session.getCourse().getCourseCode(),session.getLecturer().getId()),
+                new CourseRequest(session.getCourse().getCourseName(), session.getCourse().getCourseCode(), session.getLecturer().getId(), session.getLecturer().getDepartment().getDepartmentName()),
                 new LecturerDTO(session.getLecturer()),
                 session.getLocation(),
                 new AttendanceDT0(session.getAttendance())
