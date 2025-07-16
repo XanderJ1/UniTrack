@@ -45,7 +45,7 @@ public class CourseService {
                 .orElseThrow(() -> new NotFoundException("Department does not exist"));
         Course newCourse = new Course(courseRequest.courseName(), courseRequest.courseCode(), lecturer, department);
         courseRepository.save(newCourse);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Successfully created");
+        return ResponseEntity.status(HttpStatus.CREATED).body("Course added");
     }
 
     public ResponseEntity<List<Course>> fetchCourse(Long id) throws NotFoundException {

@@ -17,8 +17,9 @@ public record UserDTO (
         user.getFirstName(),
         user.getLastName(),
         user.getDepartment().getDepartmentName(),
-        user.getEmail(),
-        ""
+        "",
+        user.getEmail()
+
         );
     }
 }
