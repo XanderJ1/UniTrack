@@ -3,6 +3,7 @@ package com.bash.Unitrack.Service;
 import com.bash.Unitrack.Data.DTO.AttendanceDT0;
 import com.bash.Unitrack.Data.DTO.AttendanceRequestDTO;
 import com.bash.Unitrack.Data.Models.*;
+import com.bash.Unitrack.Exceptions.DeviceUsedException;
 import com.bash.Unitrack.Exceptions.NotFoundException;
 import com.bash.Unitrack.Repositories.AttendanceRepository;
 import com.bash.Unitrack.Repositories.DeviceIDRepository;
@@ -90,6 +91,23 @@ public class AttendanceService {
         return Haversine.calculateDistance(request);
     }
 
+    public void isDeviceUsed(User currentUser, String deviceID){
+        Optional<Device> deviceOptional = deviceIDRepository.findDeviceByDeviceID(deviceID);
+        if (deviceOptional.isEmpty()){
+            System.out.println(deviceID);
+            deviceIDRepository.save(new Device(Instant.now(), deviceID));
+        }else {
+            // Check If device has already taken attendance 1 minute ago
+            Device device = deviceOptional.get();
+            if (currentUser instanceof Student && device.getDeviceID().equals(deviceID)
+                    && device.getTime().isAfter(Instant.now()
+                    .minusSeconds(60))){
+                System.out.println("User has already marked attendance");
+                throw new DeviceUsedException("Device has already been used \n" + "Wait 1 minute to try again");
+            }
+        }
+    }
+
     public ResponseEntity<String> create(
             AttendanceRequestDTO attendanceRequestDTO,
             @RequestHeader("X-Device-ID") String deviceID ,
@@ -128,21 +146,8 @@ public class AttendanceService {
             student = (Student) currentUser;
         }
 
-        Optional<Device> deviceOptional = deviceIDRepository.findDeviceByDeviceID(deviceID);
-        if (deviceOptional.isEmpty()){
-            System.out.println(deviceID);
-            deviceIDRepository.save(new Device(Instant.now(), deviceID));
-        }else {
-            // Check If device has already taken attendance 1 minute ago
-            Device device = deviceOptional.get();
-            if (currentUser instanceof Student && device.getDeviceID().equals(deviceID)
-                    && device.getTime().isAfter(Instant.now()
-                    .minusSeconds(60))){
-                System.out.println("User has already marked attendance");
-                return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                        .body("Device has already been used \n" + "Wait 1 minute to try again");
-            }
-        }
+        //Check if device has been used
+        isDeviceUsed(currentUser, deviceID);
 
         double distance = range2(requestClass);
 
@@ -153,8 +158,15 @@ public class AttendanceService {
                     body("You're out of range \n" + excess + " metres from location");
         }
 
-        Attendance attendance = session.getAttendance();
+        Attendance attendance1 = session.getAttendance();
+        List<Student> presentStudents = attendance1.getStudents();
+        for(Student student1 : presentStudents){
+            if (student1.getId() == currentUser.getId()){
+                throw new DeviceUsedException("User has already taken attendance");
+            }
+        }
 
+        Attendance attendance = session.getAttendance();
         sessions = session;
         userRepository.save(student);
         List<Student> students = new ArrayList<>();
