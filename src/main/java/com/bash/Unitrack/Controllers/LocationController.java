@@ -1,9 +1,9 @@
 package com.bash.Unitrack.Controllers;
 
 import com.bash.Unitrack.Data.Models.Location;
-import com.bash.Unitrack.Data.Models.User;
-import com.bash.Unitrack.Repositories.UserRepository;
-import com.bash.Unitrack.Service.AuthenticationService;
+import com.bash.Unitrack.authentication.model.User;
+import com.bash.Unitrack.authentication.repository.UserRepository;
+import com.bash.Unitrack.authentication.service.AuthenticationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,12 +27,12 @@ public class LocationController {
     @PostMapping("")
     public ResponseEntity<String> location(@RequestBody Location location){
         Optional<User> user = userRepository.findById(authService.getId());
-        String username = "";
+        String email = "";
         if (user.isPresent()){
-            username = user.get().getUsername();
+            email = user.get().getEmail();
         }
         System.out.println(location.getLatitude());
         System.out.println(location.getLongitude());
-        return ResponseEntity.ok("Location Captured" + username);
+        return ResponseEntity.ok("Location Captured" + email);
     }
 }

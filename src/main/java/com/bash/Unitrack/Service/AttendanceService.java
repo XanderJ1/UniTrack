@@ -8,10 +8,14 @@ import com.bash.Unitrack.Exceptions.NotFoundException;
 import com.bash.Unitrack.Repositories.AttendanceRepository;
 import com.bash.Unitrack.Repositories.DeviceIDRepository;
 import com.bash.Unitrack.Repositories.SessionRepository;
-import com.bash.Unitrack.Repositories.UserRepository;
+import com.bash.Unitrack.authentication.model.Lecturer;
+import com.bash.Unitrack.authentication.model.Student;
+import com.bash.Unitrack.authentication.model.User;
+import com.bash.Unitrack.authentication.repository.UserRepository;
 import com.bash.Unitrack.Utilities.Haversine;
 import com.bash.Unitrack.Utilities.RequestClass;
 import com.bash.Unitrack.Utilities.RouteRequest;
+import com.bash.Unitrack.authentication.service.AuthenticationService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;
@@ -111,8 +115,7 @@ public class AttendanceService {
     public ResponseEntity<String> create(
             AttendanceRequestDTO attendanceRequestDTO,
             @RequestHeader("X-Device-ID") String deviceID ,
-            @RequestParam(required = false) Long id) throws NotFoundException,
-            JsonProcessingException {
+            @RequestParam(required = false) Long id) throws NotFoundException {
 
         Session session = sessionRepository.findById(attendanceRequestDTO.sessionId())
                 .orElseThrow(() -> new NotFoundException("Session does not exist"));
@@ -130,8 +133,8 @@ public class AttendanceService {
 
         Student student = new Student();
 
-        String username = authenticationService.getUsername();
-        User currentUser = userRepository.findByUsername(username).orElseThrow();
+        String email = authenticationService.getEmail();
+        User currentUser = userRepository.findByEmail(email).orElseThrow();
         if (currentUser instanceof Lecturer){
             User user = userRepository.findById(id)
                     .orElseThrow(() -> new NotFoundException("Student does not exist"));

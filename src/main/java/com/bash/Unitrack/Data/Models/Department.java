@@ -1,5 +1,6 @@
 package com.bash.Unitrack.Data.Models;
 
+import com.bash.Unitrack.authentication.model.User;
 import jakarta.persistence.*;
 import lombok.Data;
 

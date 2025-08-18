@@ -1,5 +1,7 @@
 package com.bash.Unitrack.Data.Models;
 
+import com.bash.Unitrack.authentication.model.Lecturer;
+import com.bash.Unitrack.authentication.model.Student;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
@@ -37,6 +39,12 @@ public class Course {
         this.courseName = courseName;
         this.courseCode = courseId;
         this.lecturer.add(lecturer);
+        this.department.add(department);
+    }
+
+    public Course(String courseName, String courseId, Department department){
+        this.courseName = courseName;
+        this.courseCode = courseId;
         this.department.add(department);
     }
 

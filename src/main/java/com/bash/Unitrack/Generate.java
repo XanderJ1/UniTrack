@@ -1,21 +1,19 @@
 package com.bash.Unitrack;
 
-import com.bash.Unitrack.Data.DTO.CourseRequest;
-import com.bash.Unitrack.Data.DTO.UserRequest;
 import com.bash.Unitrack.Data.Models.*;
 import com.bash.Unitrack.Exceptions.NotFoundException;
 import com.bash.Unitrack.Repositories.CourseRepository;
 import com.bash.Unitrack.Repositories.DepartmentRepository;
-import com.bash.Unitrack.Repositories.UserRepository;
-import com.fasterxml.jackson.core.type.TypeReference;
+import com.bash.Unitrack.authentication.model.Lecturer;
+import com.bash.Unitrack.authentication.model.Role;
+import com.bash.Unitrack.authentication.repository.UserRepository;
+import com.bash.Unitrack.authentication.model.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,11 +34,18 @@ public class Generate {
         this.objectMapper = objectMapper;
     }
 
-    public void verifyBeforeSave(Department department){
+    public void verifyBeforeSaveDepartment(Department department){
         if (departmentRepository.findByDepartmentName(department.getDepartmentName()).isEmpty()){
             departmentRepository.save(department);
         }
     }
+
+    public void verifyBeforeSaveCourse(Course course){
+        if (courseRepository.findByCourseName(course.getCourseName()).isEmpty()){
+            courseRepository.save(course);
+        }
+    }
+
     @Bean
     public CommandLineRunner commandLineRunner() throws NotFoundException {
 
@@ -51,10 +56,10 @@ public class Generate {
         List<Department> departments = new ArrayList<>(List.of(dept1, dept2,dept3, dept4));
 
         for(Department department: departments){
-            verifyBeforeSave(department);
+            verifyBeforeSaveDepartment(department);
         }
 
-        User user1 = new User("bash", passwordEncoder.encode("admin"), Role.ADMIN,"bash@gmail");
+        User user1 = new User("bash@gmail.com", passwordEncoder.encode("admin"), Role.ADMIN);
         Department department = departmentRepository.findByDepartmentName("Science")
                 .orElseThrow(() -> new NotFoundException("Department does not exist"));
         System.out.println(user1.getPassword());
@@ -62,11 +67,20 @@ public class Generate {
             if (userRepository.findByUsername("bash").isEmpty()){
                 user1.setDepartment(department);
                 userRepository.save(user1);
+                Course course1 = new Course("Mathematics", "CSC400", dept1);
+                Course course2 = new Course("Networking", "CSC401", dept1);
+                Course course3 = new Course("Biology", "CSC402", dept1);
+                Course course4 = new Course("History", "CSC403", dept1);
+                List<Course> courses = new ArrayList<>(List.of(course1, course2, course3, course4));
+
+                for(Course course: courses){
+                    verifyBeforeSaveCourse(course);
+                }
             }
         };
     }
 
-    @Profile("local")
+   /* @Profile("local")
     @Bean
     public CommandLineRunner userDetailLoader() throws NotFoundException {
 
@@ -126,7 +140,7 @@ public class Generate {
                 }
             }
         };
-    }
+    }*/
 }
 
 

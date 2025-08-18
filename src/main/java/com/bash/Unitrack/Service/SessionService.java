@@ -7,7 +7,10 @@ import com.bash.Unitrack.Exceptions.NotFoundException;
 import com.bash.Unitrack.Repositories.AttendanceRepository;
 import com.bash.Unitrack.Repositories.CourseRepository;
 import com.bash.Unitrack.Repositories.SessionRepository;
-import com.bash.Unitrack.Repositories.UserRepository;
+import com.bash.Unitrack.authentication.model.Lecturer;
+import com.bash.Unitrack.authentication.model.Role;
+import com.bash.Unitrack.authentication.model.User;
+import com.bash.Unitrack.authentication.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -70,12 +73,13 @@ public class SessionService {
     public Boolean isInRange(Location studentLocation, Location lecturerLocation){
         return null;
     }
+
     public ResponseEntity<String> createSession(SessionRequest sessionRequest) throws NotFoundException {
 
         Object object = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Jwt jwt = (Jwt) object;
-        String  username = jwt.getSubject();
-        User user = userRepository.findByUsername(username)
+        String  email = jwt.getSubject();
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException("User does not exist"));
         if (user.getRole().equals(Role.STUDENT)){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You should be a lecturer to create a session");

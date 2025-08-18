@@ -4,8 +4,8 @@
     import com.bash.Unitrack.Data.Models.Course;
     import com.bash.Unitrack.Data.DTO.CourseRequest;
     import com.bash.Unitrack.Exceptions.NotFoundException;
-    import com.bash.Unitrack.Service.AuthenticationService;
     import com.bash.Unitrack.Service.CourseService;
+    import com.bash.Unitrack.authentication.service.AuthenticationService;
     import jakarta.validation.Valid;
     import org.springframework.http.ResponseEntity;
     import org.springframework.web.bind.annotation.*;

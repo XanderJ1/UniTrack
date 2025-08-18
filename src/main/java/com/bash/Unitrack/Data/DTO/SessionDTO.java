@@ -3,10 +3,10 @@ package com.bash.Unitrack.Data.DTO;
 import com.bash.Unitrack.Data.Models.Location;
 import com.bash.Unitrack.Data.Models.Session;
 import com.bash.Unitrack.Data.Models.Stat;
+import com.bash.Unitrack.authentication.dto.LecturerDTO;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.*;
-import java.time.temporal.ChronoUnit;
 
 public record SessionDTO(
         Long id,

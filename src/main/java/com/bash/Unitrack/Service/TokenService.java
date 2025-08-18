@@ -1,6 +1,7 @@
 package com.bash.Unitrack.Service;
 
-import com.bash.Unitrack.Data.Models.User;
+import com.bash.Unitrack.authentication.model.User;
+import com.bash.Unitrack.authentication.security.CustomUserDetails;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
@@ -11,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class TokenService {
@@ -25,7 +25,7 @@ public class TokenService {
         this.jwtDecoder = jwtDecoder;
     }
 
-    public String generate(User user){
+    public String generate(CustomUserDetails user){
 
         Instant now = Instant.now();
 

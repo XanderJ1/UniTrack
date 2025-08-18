@@ -6,7 +6,7 @@ import com.bash.Unitrack.Data.DTO.AttendanceRequestDTO;
 import com.bash.Unitrack.Data.Models.Attendance;
 import com.bash.Unitrack.Exceptions.NotFoundException;
 import com.bash.Unitrack.Service.AttendanceService;
-import com.bash.Unitrack.Service.AuthenticationService;
+import com.bash.Unitrack.authentication.service.AuthenticationService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

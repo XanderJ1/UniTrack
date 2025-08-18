@@ -1,8 +1,7 @@
 package com.bash.Unitrack.Data.DTO;
 
 import com.bash.Unitrack.Data.Models.Attendance;
-import com.bash.Unitrack.Data.Models.Lecturer;
-import com.bash.Unitrack.Data.Models.Student;
+import com.bash.Unitrack.authentication.dto.StudentDTO;
 
 import java.time.*;
 import java.util.List;

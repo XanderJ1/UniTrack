@@ -1,10 +1,8 @@
 package com.bash.Unitrack.Controllers;
 
 import com.bash.Unitrack.Data.Models.Department;
-import com.bash.Unitrack.Data.Models.Lecturer;
-import com.bash.Unitrack.Exceptions.NotFoundException;
 import com.bash.Unitrack.Repositories.DepartmentRepository;
-import com.bash.Unitrack.Repositories.UserRepository;
+import com.bash.Unitrack.authentication.repository.UserRepository;
 import com.bash.Unitrack.Service.DepartmentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
