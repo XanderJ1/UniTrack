@@ -1,9 +1,8 @@
-package com.bash.Unitrack.Data.Models;
+package com.bash.Unitrack.Data.models;
 
 import com.bash.Unitrack.authentication.model.Lecturer;
 import com.bash.Unitrack.authentication.model.Student;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 import java.util.ArrayList;

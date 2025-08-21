@@ -1,10 +1,9 @@
 package com.bash.Unitrack;
 
-import com.bash.Unitrack.Data.Models.*;
-import com.bash.Unitrack.Exceptions.NotFoundException;
+import com.bash.Unitrack.Data.models.*;
+import com.bash.Unitrack.exceptions.NotFoundException;
 import com.bash.Unitrack.Repositories.CourseRepository;
 import com.bash.Unitrack.Repositories.DepartmentRepository;
-import com.bash.Unitrack.authentication.model.Lecturer;
 import com.bash.Unitrack.authentication.model.Role;
 import com.bash.Unitrack.authentication.repository.UserRepository;
 import com.bash.Unitrack.authentication.model.User;
@@ -64,7 +63,7 @@ public class Generate {
                 .orElseThrow(() -> new NotFoundException("Department does not exist"));
         System.out.println(user1.getPassword());
         return args -> {
-            if (userRepository.findByUsername("bash").isEmpty()){
+            if (userRepository.findByEmail("bash@gmail.com").isEmpty()){
                 user1.setDepartment(department);
                 userRepository.save(user1);
                 Course course1 = new Course("Mathematics", "CSC400", dept1);

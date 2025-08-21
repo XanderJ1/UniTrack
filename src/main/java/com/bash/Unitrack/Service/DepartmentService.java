@@ -1,6 +1,6 @@
 package com.bash.Unitrack.Service;
 
-import com.bash.Unitrack.Data.Models.Department;
+import com.bash.Unitrack.Data.models.Department;
 import com.bash.Unitrack.Repositories.DepartmentRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

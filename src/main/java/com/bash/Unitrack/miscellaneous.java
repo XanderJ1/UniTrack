@@ -9,11 +9,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Configuration
-public class Miscellaneous {
+public class miscellaneous {
 
     private final EmailService emailService;
 
-    public Miscellaneous(EmailService emailService) {
+    public miscellaneous(EmailService emailService) {
         this.emailService = emailService;
     }
 
@@ -38,7 +38,7 @@ public class Miscellaneous {
     public CommandLineRunner sendmessage(){
         return args -> {
             System.out.println("Yello");
-            emailService.passwordResetEmail( "Jane", "bzakariyya6@gmail.com","This message is used to tst the smtp server");
+            emailService.passwordResetEmail( "Jane", "bzakariyya6@gmail.com", "Server Started!!");
             System.out.println("Tea time");
         };
     }

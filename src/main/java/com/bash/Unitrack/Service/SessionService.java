@@ -2,8 +2,8 @@ package com.bash.Unitrack.Service;
 
 import com.bash.Unitrack.Data.DTO.SessionDTO;
 import com.bash.Unitrack.Data.DTO.SessionRequest;
-import com.bash.Unitrack.Data.Models.*;
-import com.bash.Unitrack.Exceptions.NotFoundException;
+import com.bash.Unitrack.Data.models.*;
+import com.bash.Unitrack.exceptions.NotFoundException;
 import com.bash.Unitrack.Repositories.AttendanceRepository;
 import com.bash.Unitrack.Repositories.CourseRepository;
 import com.bash.Unitrack.Repositories.SessionRepository;

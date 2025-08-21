@@ -1,4 +1,4 @@
-package com.bash.Unitrack.Exceptions;
+package com.bash.Unitrack.exceptions;
 
 public class NotFoundException extends Exception {
 

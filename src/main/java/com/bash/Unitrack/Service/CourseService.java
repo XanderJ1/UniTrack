@@ -2,8 +2,8 @@ package com.bash.Unitrack.Service;
 
 import com.bash.Unitrack.Data.DTO.CourseDTO;
 import com.bash.Unitrack.Data.DTO.CourseRequest;
-import com.bash.Unitrack.Data.Models.*;
-import com.bash.Unitrack.Exceptions.NotFoundException;
+import com.bash.Unitrack.Data.models.*;
+import com.bash.Unitrack.exceptions.NotFoundException;
 import com.bash.Unitrack.Repositories.CourseRepository;
 import com.bash.Unitrack.Repositories.DepartmentRepository;
 import com.bash.Unitrack.authentication.model.Lecturer;

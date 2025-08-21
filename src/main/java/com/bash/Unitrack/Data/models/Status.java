@@ -1,4 +1,4 @@
-package com.bash.Unitrack.Data.Models;
+package com.bash.Unitrack.Data.models;
 
 public enum Status {
     PENDING, COMPLETED, MISSED

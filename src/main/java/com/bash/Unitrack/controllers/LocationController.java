@@ -1,6 +1,6 @@
-package com.bash.Unitrack.Controllers;
+package com.bash.Unitrack.controllers;
 
-import com.bash.Unitrack.Data.Models.Location;
+import com.bash.Unitrack.Data.models.Location;
 import com.bash.Unitrack.authentication.model.User;
 import com.bash.Unitrack.authentication.repository.UserRepository;
 import com.bash.Unitrack.authentication.service.AuthenticationService;

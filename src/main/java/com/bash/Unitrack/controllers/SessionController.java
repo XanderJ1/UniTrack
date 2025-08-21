@@ -1,9 +1,8 @@
-package com.bash.Unitrack.Controllers;
+package com.bash.Unitrack.controllers;
 
 import com.bash.Unitrack.Data.DTO.SessionDTO;
 import com.bash.Unitrack.Data.DTO.SessionRequest;
-import com.bash.Unitrack.Data.Models.Session;
-import com.bash.Unitrack.Exceptions.NotFoundException;
+import com.bash.Unitrack.exceptions.NotFoundException;
 import com.bash.Unitrack.Service.SessionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

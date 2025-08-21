@@ -2,9 +2,9 @@ package com.bash.Unitrack.Service;
 
 import com.bash.Unitrack.Data.DTO.AttendanceDT0;
 import com.bash.Unitrack.Data.DTO.AttendanceRequestDTO;
-import com.bash.Unitrack.Data.Models.*;
-import com.bash.Unitrack.Exceptions.DeviceUsedException;
-import com.bash.Unitrack.Exceptions.NotFoundException;
+import com.bash.Unitrack.Data.models.*;
+import com.bash.Unitrack.exceptions.DeviceUsedException;
+import com.bash.Unitrack.exceptions.NotFoundException;
 import com.bash.Unitrack.Repositories.AttendanceRepository;
 import com.bash.Unitrack.Repositories.DeviceIDRepository;
 import com.bash.Unitrack.Repositories.SessionRepository;

@@ -1,4 +1,4 @@
-package com.bash.Unitrack.Data.Models;
+package com.bash.Unitrack.Data.models;
 
 import com.bash.Unitrack.authentication.model.User;
 import jakarta.persistence.*;

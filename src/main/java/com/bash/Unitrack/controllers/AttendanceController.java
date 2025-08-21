@@ -1,10 +1,10 @@
-package com.bash.Unitrack.Controllers;
+package com.bash.Unitrack.controllers;
 
 
 import com.bash.Unitrack.Data.DTO.AttendanceDT0;
 import com.bash.Unitrack.Data.DTO.AttendanceRequestDTO;
-import com.bash.Unitrack.Data.Models.Attendance;
-import com.bash.Unitrack.Exceptions.NotFoundException;
+import com.bash.Unitrack.Data.models.Attendance;
+import com.bash.Unitrack.exceptions.NotFoundException;
 import com.bash.Unitrack.Service.AttendanceService;
 import com.bash.Unitrack.authentication.service.AuthenticationService;
 import com.fasterxml.jackson.core.JsonProcessingException;

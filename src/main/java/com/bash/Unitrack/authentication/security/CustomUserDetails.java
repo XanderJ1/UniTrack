@@ -24,6 +24,7 @@ public class CustomUserDetails implements UserDetails {
     private String lastName;
     private String username;
     private String password;
+    private boolean isEnabled;
     private final Collection<? extends GrantedAuthority> authorities;
 
     public static CustomUserDetails build(User user){
@@ -33,8 +34,8 @@ public class CustomUserDetails implements UserDetails {
                 user.getLastName(),
                 user.getEmail(),
                 user.getPassword(),
+                user.isEnabled(),
                 mapRoles(user.getRole())
-
         );
     }
 
@@ -68,12 +69,12 @@ public class CustomUserDetails implements UserDetails {
     }
 
     @Override
-    public boolean isCredentialsNonExpired() {
+    public boolean isCredentialsNonExpired(){
         return UserDetails.super.isCredentialsNonExpired();
     }
 
     @Override
     public boolean isEnabled() {
-        return UserDetails.super.isEnabled();
+        return isEnabled;
     }
 }

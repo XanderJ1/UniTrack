@@ -1,8 +1,8 @@
 package com.bash.Unitrack.authentication.model;
 
-import com.bash.Unitrack.Data.Models.Attendance;
-import com.bash.Unitrack.Data.Models.Course;
-import com.bash.Unitrack.Data.Models.Session;
+import com.bash.Unitrack.Data.models.Attendance;
+import com.bash.Unitrack.Data.models.Course;
+import com.bash.Unitrack.Data.models.Session;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;

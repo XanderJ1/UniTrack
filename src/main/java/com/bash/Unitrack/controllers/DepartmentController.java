@@ -1,6 +1,6 @@
-package com.bash.Unitrack.Controllers;
+package com.bash.Unitrack.controllers;
 
-import com.bash.Unitrack.Data.Models.Department;
+import com.bash.Unitrack.Data.models.Department;
 import com.bash.Unitrack.Repositories.DepartmentRepository;
 import com.bash.Unitrack.authentication.repository.UserRepository;
 import com.bash.Unitrack.Service.DepartmentService;

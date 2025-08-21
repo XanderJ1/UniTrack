@@ -1,9 +1,9 @@
-    package com.bash.Unitrack.Controllers;
+    package com.bash.Unitrack.controllers;
     
     import com.bash.Unitrack.Data.DTO.CourseDTO;
-    import com.bash.Unitrack.Data.Models.Course;
+    import com.bash.Unitrack.Data.models.Course;
     import com.bash.Unitrack.Data.DTO.CourseRequest;
-    import com.bash.Unitrack.Exceptions.NotFoundException;
+    import com.bash.Unitrack.exceptions.NotFoundException;
     import com.bash.Unitrack.Service.CourseService;
     import com.bash.Unitrack.authentication.service.AuthenticationService;
     import jakarta.validation.Valid;

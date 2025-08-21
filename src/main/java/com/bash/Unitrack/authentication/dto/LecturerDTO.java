@@ -7,7 +7,8 @@ public record LecturerDTO(
         String lastName,
         String email,
         String role,
-        String department
+        String department,
+        String username
 ) {
     public LecturerDTO(Lecturer lecturer) {
         this(
@@ -15,7 +16,8 @@ public record LecturerDTO(
                 lecturer.getLastName(),
                 lecturer.getEmail(),
                 lecturer.getRole().name(),
-                lecturer.getDepartment().getDepartmentName()
+                lecturer.getDepartment().getDepartmentName(),
+                lecturer.getUsername()
         );
     }
 }

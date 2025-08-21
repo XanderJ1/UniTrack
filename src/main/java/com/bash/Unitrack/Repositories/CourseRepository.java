@@ -1,6 +1,6 @@
 package com.bash.Unitrack.Repositories;
 
-import com.bash.Unitrack.Data.Models.Course;
+import com.bash.Unitrack.Data.models.Course;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

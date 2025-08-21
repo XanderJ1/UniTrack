@@ -1,5 +1,5 @@
 package com.bash.Unitrack.Data.DTO;
-import com.bash.Unitrack.Data.Models.Course;
+import com.bash.Unitrack.Data.models.Course;
 import com.bash.Unitrack.authentication.dto.LecturerDTO;
 
 import java.util.List;

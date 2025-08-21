@@ -1,7 +1,7 @@
 package com.bash.Unitrack.authentication.model;
 
-import com.bash.Unitrack.Data.Models.Attendance;
-import com.bash.Unitrack.Data.Models.Course;
+import com.bash.Unitrack.Data.models.Attendance;
+import com.bash.Unitrack.Data.models.Course;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;

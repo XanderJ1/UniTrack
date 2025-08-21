@@ -1,6 +1,6 @@
 package com.bash.Unitrack.Repositories;
 
-import com.bash.Unitrack.Data.Models.Device;
+import com.bash.Unitrack.Data.models.Device;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.web.bind.annotation.RestController;
 

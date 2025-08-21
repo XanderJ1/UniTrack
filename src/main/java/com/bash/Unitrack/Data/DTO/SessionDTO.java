@@ -1,8 +1,8 @@
 package com.bash.Unitrack.Data.DTO;
 
-import com.bash.Unitrack.Data.Models.Location;
-import com.bash.Unitrack.Data.Models.Session;
-import com.bash.Unitrack.Data.Models.Stat;
+import com.bash.Unitrack.Data.models.Location;
+import com.bash.Unitrack.Data.models.Session;
+import com.bash.Unitrack.Data.models.Stat;
 import com.bash.Unitrack.authentication.dto.LecturerDTO;
 import com.fasterxml.jackson.annotation.JsonProperty;
 

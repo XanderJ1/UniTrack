@@ -1,7 +1,6 @@
-package com.bash.Unitrack.Data.Models;
+package com.bash.Unitrack.Data.models;
 
 import com.bash.Unitrack.authentication.model.Lecturer;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

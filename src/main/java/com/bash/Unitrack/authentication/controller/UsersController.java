@@ -2,7 +2,7 @@ package com.bash.Unitrack.authentication.controller;
 
 import com.bash.Unitrack.authentication.dto.UserDTO;
 import com.bash.Unitrack.authentication.dto.request.register;
-import com.bash.Unitrack.Exceptions.NotFoundException;
+import com.bash.Unitrack.exceptions.NotFoundException;
 import com.bash.Unitrack.authentication.service.AuthenticationService;
 import com.bash.Unitrack.authentication.service.UserService;
 import org.springframework.http.ResponseEntity;

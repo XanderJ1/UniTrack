@@ -1,6 +1,6 @@
 package com.bash.Unitrack.authentication.service;
 
-import com.bash.Unitrack.Exceptions.NotFoundException;
+import com.bash.Unitrack.exceptions.NotFoundException;
 import com.bash.Unitrack.authentication.model.Lecturer;
 import com.bash.Unitrack.authentication.model.Student;
 import com.bash.Unitrack.authentication.model.User;
