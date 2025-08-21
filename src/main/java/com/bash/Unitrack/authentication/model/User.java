@@ -4,6 +4,8 @@ import com.bash.Unitrack.Data.Models.Department;
 import com.bash.Unitrack.Data.Models.Location;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -12,7 +14,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
-@Data
+@Setter
+@Getter
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "app_user", discriminatorType = DiscriminatorType.STRING)
@@ -49,4 +52,9 @@ public class User{
         this.password = password;
         this.email = email;
     }
+
+    public void setDepartment(Department department) {
+        this.department = department;
+    }
+
 }
