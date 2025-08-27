@@ -1,0 +1,39 @@
+spring:
+  application:
+    name: UniTrack
+  profiles:
+    active: deploy
+  jpa:
+    hibernate:
+      ddl:
+        auto: create-drop
+    show-sql: true
+  mail:
+    host: ${MAIL_HOST}
+    port: ${MAIL_PORT}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    debug: true
+    properties:
+      mail:
+        smtp:
+          auth: true
+          timeout: 5000
+          starttls:
+            enable: true
+app:
+  email: ${MAIL_USERNAME}
+  baseUrl: https://unitrack.bash.ip-ddns.com
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+    show-actuator: true
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
