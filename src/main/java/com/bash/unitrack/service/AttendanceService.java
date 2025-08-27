@@ -18,6 +18,7 @@ import com.bash.unitrack.utilities.RouteRequest;
 import com.bash.unitrack.authentication.service.AuthenticationService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
@@ -61,7 +62,6 @@ public class AttendanceService {
         this.deviceIDRepository = deviceIDRepository;
     }
 
-    @Cacheable(value = "attendance")
     public ResponseEntity<List<AttendanceDT0>> fetchAttendance() {
         return ResponseEntity.ok(attendanceRepository.findAll()
                 .stream().map(AttendanceDT0::new).collect(Collectors.toList()));
@@ -115,10 +115,9 @@ public class AttendanceService {
         }
     }
 
-    @CachePut(value = "attendance", key = "#attendanceRequestDTO.sessionId()")
     public ResponseEntity<String> create(
             AttendanceRequestDTO attendanceRequestDTO,
-            @RequestHeader("X-Device-ID") String deviceID ,
+            @RequestHeader("X-Device-ID") String deviceID,
             @RequestParam(required = false) Long id) throws NotFoundException {
 
         Session session = sessionRepository.findById(attendanceRequestDTO.sessionId())
@@ -186,7 +185,6 @@ public class AttendanceService {
         return ResponseEntity.status(HttpStatus.CREATED).body("Attendance Marked");
     }
 
-    @Cacheable(value = "attendance", key = "#id")
     public ResponseEntity<AttendanceDT0> getSpecificAttendance(Long id) throws NotFoundException {
         Attendance attendance = attendanceRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Attendance does not exist"));
