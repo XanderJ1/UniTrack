@@ -2,13 +2,128 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>UniTrack</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Verification - UniTrack</title>
+    <style>
+        /* Reset default styles */
+        body, table, td, p, h1, h2, a {
+          margin: 0;
+          padding: 0;
+          font-family: Arial, Helvetica, sans-serif;
+        }
+        body {
+          background-color: #f4f6f8;
+          color: #333;
+          line-height: 1.6;
+        }
+        /* Container */
+        .container {
+          width: 100%;
+          max-width: 600px;
+          margin: 0 auto;
+          background: #ffffff;
+          border-radius: 8px;
+          overflow: hidden;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        /* Header */
+        .header {
+          background-color: #4A90E2;
+          padding: 20px;
+          text-align: center;
+        }
+        .header h1 {
+          font-size: 24px;
+          color: #ffffff;
+        }
+        /* Body */
+        .content {
+          padding: 30px;
+        }
+        .content p {
+          font-size: 16px;
+          margin-bottom: 20px;
+        }
+        .content h2 {
+          font-size: 20px;
+          margin-bottom: 15px;
+        }
+        /* Button */
+        .button {
+          display: inline-block;
+          padding: 12px 24px;
+          background-color: #4A90E2;
+          color: #ffffff;
+          text-decoration: none;
+          border-radius: 5px;
+          font-size: 16px;
+          font-weight: bold;
+          margin: 20px 0;
+        }
+        .button:hover {
+          background-color: #357ABD;
+        }
+        /* Footer */
+        .footer {
+          padding: 20px;
+          text-align: center;
+          background-color: #f4f6f8;
+          font-size: 14px;
+          color: #666;
+        }
+        /* Responsive Design */
+        @media only screen and (max-width: 600px) {
+          .container {
+            width: 100%;
+            border-radius: 0;
+          }
+          .content {
+            padding: 20px;
+          }
+          .header h1 {
+            font-size: 20px;
+          }
+          .button {
+            padding: 10px 20px;
+            font-size: 14px;
+          }
+        }
+    </style>
 </head>
 <body>
-<p>Hello <strong>{{name}}</strong>,</p>
-<p>You have successfully created an account.</p>
-<p>Click the button below to verify your email:</p>
-<a href="{{token}}">Verify Email</a>
-<b>This link expires in {{expirationTime}}</b>
+<table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f4f6f8; padding:40px 0;">
+    <tr>
+        <td align="center">
+            <table class="container" cellpadding="0" cellspacing="0">
+                <!-- Header -->
+                <tr>
+                    <td class="header">
+                        <h1>UniTrack</h1>
+                    </td>
+                </tr>
+                <!-- Body -->
+                <tr>
+                    <td class="content">
+                        <p>Hello <strong>{{name}}</strong>,</p>
+                        <h2>Verify Your Email Address</h2>
+                        <p>Thank you for signing up with UniTrack! To complete your registration, please verify your email address by clicking the button below:</p>
+                        <a href="{{token}}" class="button">Verify Email</a>
+                        <p>If the button doesn't work, copy and paste this link into your browser:</p>
+                        <p><a href="{{token}}" style="color:#4A90E2; word-break:break-all;">{{verification_link}}</a></p>
+                        <p>This link will expire in 24 hours. If you did not create an account with UniTrack, please ignore this email.</p>
+                        <p>Best regards,<br>The UniTrack Team</p>
+                    </td>
+                </tr>
+                <!-- Footer -->
+                <tr>
+                    <td class="footer">
+                        <p>&copy; 2025 UniTrack. All rights reserved.</p>
+                        <p>If you have any questions, contact us at <a href="mailto:bzakariyya9@unitrack.com" style="color:#4A90E2;">support@unitrack.com</a>.</p>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
 </body>
 </html>

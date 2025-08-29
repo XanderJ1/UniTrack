@@ -8,6 +8,7 @@ import com.bash.unitrack.authentication.model.Role;
 import com.bash.unitrack.authentication.repository.UserRepository;
 import com.bash.unitrack.authentication.model.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +24,8 @@ public class Generate {
     private final DepartmentRepository departmentRepository;
     private final PasswordEncoder passwordEncoder;
     private final CourseRepository courseRepository;
+    @Value("${ADMIN_PASSWORD}}")
+    private String adminPassword;
 
     private final ObjectMapper objectMapper;
     public Generate(UserRepository userRepository, DepartmentRepository departmentRepository, PasswordEncoder passwordEncoder, CourseRepository courseRepository, ObjectMapper objectMapper){
@@ -58,7 +61,7 @@ public class Generate {
             verifyBeforeSaveDepartment(department);
         }
 
-        User user1 = new User("bash@gmail.com", passwordEncoder.encode("admin"), Role.ADMIN);
+        User user1 = new User("bash@gmail.com", passwordEncoder.encode(adminPassword), Role.ADMIN);
         Department department = departmentRepository.findByDepartmentName("Science")
                 .orElseThrow(() -> new NotFoundException("Department does not exist"));
         System.out.println(user1.getPassword());
