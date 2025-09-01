@@ -1,0 +1,29 @@
+# PostgreSQL Database Configuration
+spring:
+  datasource.url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+  datasource.username: ${DB_USERNAME}
+  datasource.password: ${DB_PASSWORD}
+  datasource.driver-class-name: org.postgresql.Driver
+  jpa.hibernate.ddl-auto: create-drop
+
+  mail:
+    host: ${MAIL_HOST}
+    port: ${MAIL_PORT}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    debug: true
+    properties:
+      mail:
+        smtp:
+          auth: true
+          timeout: 5000
+          ssl:
+            enable: true
+
+
+app:
+  email: ${MAIL_USERNAME}
+  baseUrl: http://localhost:8081
+
+
+server.port: 8081

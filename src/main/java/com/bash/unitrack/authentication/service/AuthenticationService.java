@@ -1,20 +1,19 @@
     package com.bash.unitrack.authentication.service;
 
+    import com.bash.unitrack.authentication.dto.request.ResetPassword;
+    import com.bash.unitrack.authentication.model.*;
+    import com.bash.unitrack.authentication.repository.TokenRepository;
     import com.bash.unitrack.data.models.*;
     import com.bash.unitrack.authentication.dto.request.PasswordReset;
     import com.bash.unitrack.email.EmailService;
     import com.bash.unitrack.exceptions.BadCredentialsException;
     import com.bash.unitrack.exceptions.NotFoundException;
     import com.bash.unitrack.repositories.DepartmentRepository;
-    import com.bash.unitrack.authentication.model.Lecturer;
-    import com.bash.unitrack.authentication.model.Role;
-    import com.bash.unitrack.authentication.model.Student;
-    import com.bash.unitrack.authentication.model.User;
     import com.bash.unitrack.authentication.repository.UserRepository;
     import com.bash.unitrack.service.TokenService;
     import com.bash.unitrack.authentication.dto.request.SignIn;
     import com.bash.unitrack.authentication.dto.response.signInResponse;
-    import com.bash.unitrack.authentication.dto.request.register;
+    import com.bash.unitrack.authentication.dto.request.Register;
     import com.bash.unitrack.authentication.security.CustomUserDetails;
     import jakarta.mail.MessagingException;
     import jakarta.validation.Valid;
@@ -32,6 +31,7 @@
     import org.springframework.stereotype.Service;
 
     import java.io.IOException;
+    import java.util.Map;
 
     @Slf4j
     @Service
@@ -40,6 +40,7 @@
         private final UserRepository userRepository;
 
         private final PasswordEncoder passwordEncoder;
+        private final TokenRepository tokenRepository;
 
         private final TokenService tokenService;
 
@@ -49,11 +50,12 @@
        private final JwtDecoder jwtDecoder;
 
         public AuthenticationService(UserRepository userRepository,
-                                     PasswordEncoder passwordEncoder,
+                                     PasswordEncoder passwordEncoder, TokenRepository tokenRepository,
                                      AuthenticationManager authenticationManager,
                                      TokenService tokenService, DepartmentRepository departmentRepository, EmailService emailService, JwtDecoder jwtDecoder){
             this.userRepository = userRepository;
             this.passwordEncoder = passwordEncoder;
+            this.tokenRepository = tokenRepository;
             this.authenticationManager = authenticationManager;
             this.tokenService = tokenService;
             this.departmentRepository = departmentRepository;
@@ -73,7 +75,7 @@
             return jwt.getClaim("user_id");
         }
 
-        public ResponseEntity<String> register(@Valid register register) throws BadCredentialsException, NotFoundException, MessagingException, IOException {
+        public ResponseEntity<String> register(@Valid Register register) throws BadCredentialsException, NotFoundException, MessagingException, IOException {
             if (register.username() == null || register.password() == null || register.role() == null) {
                 throw new BadCredentialsException("Enter credentials");
             }
@@ -137,15 +139,6 @@
         return ResponseEntity.ok(new signInResponse(jwt, role));
     }
 
-    public ResponseEntity<String> requestPasswordReset(PasswordReset body) throws MessagingException, IOException, NotFoundException {
-            String email = body.email();
-            User user = userRepository.findByEmail(email)
-                    .orElseThrow(() -> new NotFoundException("User does not exist"));
-            String token = tokenService.generatePasswordToken(CustomUserDetails.build(user));
-            emailService.passwordResetEmail(user.getFirstName(), user.getEmail(), token);
-            log.info("Password reset link sent to {}", user.getEmail());
-            return ResponseEntity.ok("Check your mail ot reset your password");
-    }
     public ResponseEntity<String> verifyEmail(String token) throws NotFoundException {
         Jwt jwt = jwtDecoder.decode(token);
         String email = jwt.getSubject();
@@ -162,16 +155,37 @@
         return ResponseEntity.ok("Your account has been verified successfully");
     }
 
-        public ResponseEntity<String> passwordReset(String token, String password) throws NotFoundException {
-            Jwt jwt = jwtDecoder.decode(token);
-            String email = jwt.getSubject();
-            if (!(jwt.getClaim("purpose").equals("passwordReset"))){
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid token");
-            }
-            User user = userRepository.findByEmail(email)
-                    .orElseThrow(() -> new NotFoundException("User does not exist"));
-            user.setPassword(passwordEncoder.encode(password));
-            userRepository.save(user);
-            return ResponseEntity.ok("Your password has been reset successfully");
+
+    public ResponseEntity<String> requestPasswordReset(PasswordReset body) throws MessagingException, IOException, NotFoundException {
+        String email = body.email();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new NotFoundException("User does not exist"));
+        String generatedPasswordToken = tokenService.generatePasswordToken(CustomUserDetails.build(user));
+        emailService.passwordResetEmail(user.getFirstName(), user.getEmail(), generatedPasswordToken);
+        Token token = Token.builder()
+                .token(generatedPasswordToken)
+                .isUsed(false)
+                .email(email)
+                .build();
+        tokenRepository.save(token);
+        log.info("Password reset link sent to {}", user.getEmail());
+        return ResponseEntity.ok("Check your mail to reset your password");
+    }
+
+    public ResponseEntity<Map<String, String>> passwordReset(String newToken, ResetPassword password) throws NotFoundException {
+        Token token = tokenRepository.findByToken(newToken);
+        boolean isUsed = token.isUsed();
+        log.info(String.valueOf(isUsed));
+        if (isUsed){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("message","Token has been used."));
         }
+        User user = userRepository.findByEmail(token.getEmail())
+                .orElseThrow(() -> new NotFoundException("User does not exist"));
+        token.setUsed(true);
+        tokenRepository.save(token);
+        log.info(String.valueOf(isUsed));
+        user.setPassword(passwordEncoder.encode(password.newPassword()));
+        userRepository.save(user);
+        return ResponseEntity.ok(Map.of("message", "Your password has been reset successfully"));
+    }
 }

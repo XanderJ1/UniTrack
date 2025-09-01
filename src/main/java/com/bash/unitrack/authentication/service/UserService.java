@@ -6,7 +6,7 @@ import com.bash.unitrack.authentication.model.Student;
 import com.bash.unitrack.authentication.model.User;
 import com.bash.unitrack.authentication.repository.UserRepository;
 import com.bash.unitrack.authentication.dto.UserDTO;
-import com.bash.unitrack.authentication.dto.request.register;
+import com.bash.unitrack.authentication.dto.request.Register;
 import com.bash.unitrack.authentication.security.CustomUserDetails;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -46,7 +46,7 @@ public class UserService implements UserDetailsService {
         return userRepository.findAll().stream().map(UserDTO::new).collect(Collectors.toList());
     }
 
-    public ResponseEntity<String> update(register register) throws NotFoundException {
+    public ResponseEntity<String> update(Register register) throws NotFoundException {
         User user = userRepository.findByUsername(register.username())
                 .orElseThrow(() -> new NotFoundException(errorMessage));
 

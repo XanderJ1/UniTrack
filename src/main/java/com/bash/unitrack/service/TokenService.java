@@ -77,6 +77,7 @@ public class TokenService {
                 .claim("roles", scope)
                 .claim("purpose", "passwordReset")
                 .claim("user_id", user.getId())
+                .claim("isUsed", false)
                 .expiresAt(now.plusSeconds(5000))
                 .build();
         System.out.println(claimsSet.getClaims());

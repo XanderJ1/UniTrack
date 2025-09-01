@@ -1,13 +1,10 @@
 package com.bash.unitrack.authentication.controller;
 
 import com.bash.unitrack.authentication.dto.UserDTO;
-import com.bash.unitrack.authentication.dto.request.register;
+import com.bash.unitrack.authentication.dto.request.Register;
 import com.bash.unitrack.exceptions.NotFoundException;
 import com.bash.unitrack.authentication.service.AuthenticationService;
 import com.bash.unitrack.authentication.service.UserService;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,7 +33,7 @@ public class UsersController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<String > update(@RequestBody register register) throws NotFoundException {
+    public ResponseEntity<String > update(@RequestBody Register register) throws NotFoundException {
         return userservice.update(register);
     }
 

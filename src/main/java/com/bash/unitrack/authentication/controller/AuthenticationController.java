@@ -3,7 +3,7 @@ package com.bash.unitrack.authentication.controller;
 import com.bash.unitrack.authentication.dto.request.PasswordReset;
 import com.bash.unitrack.authentication.dto.request.SignIn;
 import com.bash.unitrack.authentication.dto.response.signInResponse;
-import com.bash.unitrack.authentication.dto.request.register;
+import com.bash.unitrack.authentication.dto.request.Register;
 import com.bash.unitrack.exceptions.BadCredentialsException;
 import com.bash.unitrack.exceptions.NotFoundException;
 import com.bash.unitrack.authentication.service.AuthenticationService;
@@ -25,7 +25,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@Valid @RequestBody register register) throws BadCredentialsException, NotFoundException, MessagingException, IOException {
+    public ResponseEntity<String> register(@Valid @RequestBody Register register) throws BadCredentialsException, NotFoundException, MessagingException, IOException {
         return authenticationService.register(register);
     }
 
@@ -38,11 +38,6 @@ public class AuthenticationController {
     @GetMapping("/verify-email")
     public ResponseEntity<String > verifyEmail(@RequestParam(required = true) String token) throws NotFoundException {
         return authenticationService.verifyEmail(token);
-    }
-
-    @PostMapping("/password-reset")
-    public ResponseEntity<String > resetPassword(@RequestParam(required = true) String token, @RequestParam String password) throws NotFoundException {
-        return authenticationService.passwordReset(token, password);
     }
 
     @PostMapping("/forgot-password")
