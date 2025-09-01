@@ -30,7 +30,7 @@ public record Register(
         String email,
 
         @NotBlank(message = "Role is required")
-        @Pattern(regexp = "STUDENT|TEACHER|ADMIN", message = "Role must be STUDENT, TEACHER, or ADMIN")
+        @Pattern(regexp = "STUDENT|LECTURER|ADMIN", message = "Role must be STUDENT, LECTURER, or ADMIN")
         String role,
 
         @NotBlank(message = "Department is required")

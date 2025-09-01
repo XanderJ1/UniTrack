@@ -32,6 +32,7 @@
 
     import java.io.IOException;
     import java.util.Map;
+    import java.util.Optional;
 
     @Slf4j
     @Service
@@ -124,10 +125,21 @@
 
         }
 
-    public ResponseEntity<signInResponse> signIn(@Valid SignIn userRequest) throws BadCredentialsException {
+    public ResponseEntity<signInResponse> signIn(@Valid SignIn userRequest) throws BadCredentialsException, MessagingException, IOException, NotFoundException {
 
         if (userRequest.email() == null || userRequest.password() == null) {
             throw new BadCredentialsException("Enter username and password");
+        }
+
+        Optional<User> user1 = userRepository.findByEmail(userRequest.email());
+
+        if (user1.isPresent()){
+            User user = user1.get();
+            if (!user.isEnabled()){
+                String token = tokenService.generateVerificationToken(CustomUserDetails.build(user));
+                emailService.verifyEmail(userRequest.email(), "Verify Email", token);
+                throw new NotFoundException("Account exists verify email to activate account");
+            }
         }
 
         Authentication authentication = authenticationManager
@@ -175,7 +187,6 @@
     public ResponseEntity<Map<String, String>> passwordReset(String newToken, ResetPassword password) throws NotFoundException {
         Token token = tokenRepository.findByToken(newToken);
         boolean isUsed = token.isUsed();
-        log.info(String.valueOf(isUsed));
         if (isUsed){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("message","Token has been used."));
         }
@@ -183,7 +194,6 @@
                 .orElseThrow(() -> new NotFoundException("User does not exist"));
         token.setUsed(true);
         tokenRepository.save(token);
-        log.info(String.valueOf(isUsed));
         user.setPassword(passwordEncoder.encode(password.newPassword()));
         userRepository.save(user);
         return ResponseEntity.ok(Map.of("message", "Your password has been reset successfully"));

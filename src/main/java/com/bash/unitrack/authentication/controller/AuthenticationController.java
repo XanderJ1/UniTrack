@@ -30,7 +30,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/signIn")
-    public ResponseEntity<signInResponse> signIn(@Valid @RequestBody SignIn userRequest) throws BadCredentialsException {
+    public ResponseEntity<signInResponse> signIn(@Valid @RequestBody SignIn userRequest) throws BadCredentialsException, MessagingException, NotFoundException, IOException {
 
         return authenticationService.signIn(userRequest);
     }
