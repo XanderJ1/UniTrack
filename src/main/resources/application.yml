@@ -2,7 +2,7 @@ spring:
   application:
     name: UniTrack
   profiles:
-    active: deploy
+    active: local
   jpa:
     hibernate:
       ddl:
