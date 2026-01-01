@@ -1,4 +1,9 @@
 name: helloworld.yml
 on:
+  workflow_dispatch:
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - run : echo "Hello World"
