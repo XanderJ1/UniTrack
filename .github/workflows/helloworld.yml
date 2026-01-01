@@ -3,7 +3,27 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  echo:
     runs-on: ubuntu-latest
     steps:
       - run : echo "Hello World"
+      - run : echo "Goodbye World"
+
+  echo2:
+    runs-on: ubuntu-latest
+    steps:
+      - run : echo "Hello World"
+
+  echo3:
+    runs-on: ubuntu-latest
+    steps:
+      - run : echo "Goodbye World"
+      - run : echo "Hello World"
+    needs:
+      - echo2
+
+  echo4:
+    runs-on: ubuntu-latest
+    steps:
+      - run : echo | ls
+    needs: echo3
