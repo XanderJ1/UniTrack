@@ -3,8 +3,9 @@ WORKDIR /app
 COPY . .
 RUN mvn clean package -DskipTests
 
-FROM openjdk:21-jdk
+FROM eclipse-temurin:21-jre
 WORKDIR /app
-COPY --from=build /app/target/Unitrack-0.0.1-SNAPSHOT.jar /app/Unitrack-0.0.1-SNAPSHOT.jar
+# Use a wildcard or ensure the source path matches your artifact ID
+COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8081
-ENTRYPOINT ["java", "-jar", "Unitrack-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
