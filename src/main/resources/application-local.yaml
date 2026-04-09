@@ -1,6 +1,6 @@
 spring:
     datasource:
-      url: jdbc:postgresql://ep-broad-hat-adixmbvj-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
+      url: jdbc:postgresql://localhost:5432/unitrackdb
       username: ${DB_USERNAME}
       password: ${DB_PASSWORD}
       driver-class-name: org.postgresql.Driver

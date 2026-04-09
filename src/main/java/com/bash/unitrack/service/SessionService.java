@@ -108,7 +108,7 @@ public class SessionService {
 
         Object object = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Jwt jwt = (Jwt) object;
-        String  email = jwt.getSubject();
+        String email = jwt.getSubject();
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException("User does not exist"));
         if (user.getRole().equals(Role.STUDENT)){
