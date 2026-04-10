@@ -7,6 +7,30 @@ jobs:
 
   check-lint:
     runs-on: ubuntu-latest
+
+    env:
+      DB_HOST: ${{ secrets.DB_HOST }}
+      DB_USERNAME: ${{ secrets.DB_USERNAME }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+
+      MAIL_HOST: ${{ secrets.MAIL_HOST }}
+      MAIL_PORT: ${{ secrets.MAIL_PORT }}
+      MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
+      MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
+      MAIL_SMTP_AUTH: ${{ secrets.MAIL_SMTP_AUTH }}
+      MAIL_SMTP_STARTTLS_ENABLE: ${{ secrets.MAIL_SMTP_STARTTLS_ENABLE }}
+
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      JWT_EXPIRATION_MS: ${{ secrets.JWT_EXPIRATION_MS }}
+      JWT_REFRESH_EXPIRATION_MS: ${{ secrets.JWT_REFRESH_EXPIRATION_MS }}
+      JWT_ISSUER: ${{ secrets.JWT_ISSUER }}
+
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      BASE_URL: ${{ secrets.BASE_URL }}
+      ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+
     steps:
       - uses: actions/checkout@v4
 
