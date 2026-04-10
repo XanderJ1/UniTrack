@@ -4,6 +4,22 @@ on:
     branches: [ master, main ]
 
 jobs:
+
+  check-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Maven Action
+        uses: s4u/setup-maven-action@v1.20.0
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Run lint
+        run: mvn clean verify
+
+
   publish:
     runs-on: ubuntu-latest
     steps:
@@ -38,3 +54,5 @@ jobs:
           context: .
           push: true
           tags: xanderj4/uni-track:latest
+    needs:
+      - check-lint

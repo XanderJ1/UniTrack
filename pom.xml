@@ -143,6 +143,35 @@
 					</excludes>
 				</configuration>
 			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>3.3.0</version>
+
+				<configuration>
+					<!-- Use a predefined ruleset -->
+					<configLocation>google_checks.xml</configLocation>
+
+					<!-- Show errors in console -->
+					<consoleOutput>true</consoleOutput>
+
+					<!-- Fail build if issues exist -->
+					<failsOnError>true</failsOnError>
+					<failOnViolation>false</failOnViolation>
+					<violationSeverity>warning</violationSeverity>
+
+				</configuration>
+
+				<executions>
+					<execution>
+						<phase>verify</phase>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 
